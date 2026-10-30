@@ -1,0 +1,97 @@
+[
+  {
+    "path": "drivers/input/touchscreen/nt36532/nt36xxx.h",
+    "sha256": "6a4f1f5eb1f71198097bf2cc6090c41d54fa4c8b6d81810012ee4d746a320325",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/nt36xxx.h"
+  },
+  {
+    "path": "drivers/input/touchscreen/nt36532/nt36xxx_fw_update.c",
+    "sha256": "858fb087aa0e2e39e939962a5eeeeaa6d604dd5ad36b6aa7a0837720a239f48f",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/nt36xxx_fw_update.c"
+  },
+  {
+    "path": "drivers/input/touchscreen/nt36532/nt36xxx.c",
+    "sha256": "c871a208c627cfbeecd38e03d5d33b76a53a13c6d710ad8ea80eaaff13ad1b67",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/nt36xxx.c"
+  },
+  {
+    "path": "drivers/input/touchscreen/nt36532/nt36xxx_ext_proc.c",
+    "sha256": "99bd00a450d190ecbff1e7f2ae77d9fb0cb1963b6bc860770b06bc583eb5f9f3",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/nt36xxx_ext_proc.c"
+  },
+  {
+    "path": "techpack/display/msm/dsi/dsi_display.c",
+    "sha256": "4e4f8be044f80075db9ddfb6e610ba5c25d26c03b334653cf4143d6b43f67325",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/dsi_display.c"
+  },
+  {
+    "path": "include/drm/drm_panel.h",
+    "sha256": "a45d5115720bf2e2998da0d88bfb43d25f9bb04d40494816e639ef435f8bcd11",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/drm_panel.h"
+  },
+  {
+    "path": "techpack/display/msm/dsi/dsi_drm.c",
+    "sha256": "1879118f5e85f6ce11208c2aa1348a8ec40131ac31083ad360594858992a4ea3",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/dsi_drm.c"
+  },
+  {
+    "path": "techpack/display/msm/dsi/dsi_drm.h",
+    "sha256": "a5b39e3e60840a623e7403dd6d1fb99a1c621c0aad3aaaf4fea979f38dba8a30",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/dsi_drm.h"
+  },
+  {
+    "path": "techpack/display/msm/dsi/dsi_panel.c",
+    "sha256": "a6cbcda94d64347a1ec016f171e914dbc116784c8dbc1e11ea92ec8012af0c3c",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/dsi_panel.c"
+  },
+  {
+    "path": "techpack/display/msm/dsi/dsi_display.h",
+    "sha256": "b6497f22cdde923d9fa986b368e768162f88e1637eeb6cc2334661430b9b5e58",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/dsi_display.h"
+  },
+  {
+    "path": "drivers/usb/dwc3/dwc3-msm.c",
+    "sha256": "27d9254115b7375ce4f247e58324b7dac06a82a7815eecc819994ed5eb4b5502",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/overlays/dwc3-msm.c"
+  },
+  {
+    "path": "techpack/audio/asoc/codecs/tfa98xx/src/tfa98xx.c",
+    "sha256": "0f4b581a256734ec9249639e6f28e28e33946d480f16992d14796f841814881a",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/tfa98xx.c"
+  },
+  {
+    "path": "techpack/audio/asoc/codecs/tfa98xx/inc/tfa98xx.h",
+    "sha256": "3b58995fa9b9cd0121d5b32bdca2512dd4553b2c7241b4aa3af79111f0adc2c2",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/tfa98xx.h"
+  },
+  {
+    "path": "techpack/audio/asoc/codecs/tfa98xx/inc/r94_route_core.h",
+    "sha256": "5b2066fe7668d8511ecb27eb5d7c4ec1af32bf96aa6ba3d26668450295967bf5",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/irq-wake-owner-v43/r94_route_core.h"
+  },
+  {
+    "path": "build/tb371fc/kernel43.config",
+    "sha256": "4dcaebca4ccca59c5172b4e6c573bea22ed5b039a1cb8eab0fa45ff39bc6bf52",
+    "provenance": "/work/tb371fc-c16-r7-20261010/r94-vnet-build/.config"
+  },
+  {
+    "path": "drivers/net/oplus_vnet/oplus_vnet.c",
+    "sha256": "908c1ab6f362846ddaa8f1d4adfeef44283cb5c8ecc5a60e5d5d84f689055f87",
+    "provenance": "/mnt/e/TB371FC-ROM/Codex\u5f52\u6863/2026-10-15/tb371fc-coloros16-e-tb371fc-rom-workspaces/work/direct-repair-20261015/communication-vnet-dualstack/candidate-v1/oplus_vnet.c"
+  },
+  {
+    "path": "drivers/net/oplus_vnet/Makefile",
+    "sha256": "5b8b0b1c4e7927c723ebdde73562214da879c1ef1954e67602cd6eff971409de",
+    "provenance": null
+  },
+  {
+    "path": "build/tb371fc/build.sh",
+    "sha256": "90f3c4489f4f35d26697cc05a3232dc14e0b4a84795ae9708b2f423a01e6b2cb",
+    "provenance": null
+  },
+  {
+    "path": "README-TB371FC.md",
+    "sha256": "419c6aff33f087d04e5184f3bbfa637eb89fc5799e6f1561811bdee5cb294d1e",
+    "provenance": null
+  }
+]
