@@ -1,0 +1,32 @@
+{
+  "state": "34_ACTUAL_DRIVER_AND_IRQ_CORE_FAILURE_AND_PTHREAD_CASES_PASS",
+  "driver_functions": [
+    "nvt_irq_wake_ctrl_locked",
+    "nvt_wdt_sleep_close_irq",
+    "nvt_runtime_failure_close_irq",
+    "nvt_wdt_sleep_stop",
+    "nvt_hall_sleep_update",
+    "nvt_hall_check_func",
+    "nvt_ts_pm_suspend",
+    "nvt_ts_pm_resume",
+    "nvt_ts_pre_suspend",
+    "nvt_ts_suspend_cancel",
+    "nvt_ts_suspend",
+    "nvt_ts_resume",
+    "nvt_panel_resume_prepare",
+    "nvt_panel_resume_arm",
+    "nvt_panel_resume_commit",
+    "nvt_panel_resume_abort",
+    "nvt_ts_begin_stop",
+    "Boot_Update_Firmware"
+  ],
+  "actual_kernel_irq_core_used": true,
+  "real_pthread_interleavings": 2,
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "hardware_and_workqueue_primitives_substituted": true,
+  "actual_physical_double_tap_verified": false,
+  "source_sha256": "c871a208c627cfbeecd38e03d5d33b76a53a13c6d710ad8ea80eaaff13ad1b67"
+}

@@ -1,0 +1,75 @@
+{
+  "baseline": "historical stock11 files used by the kernel43 build script; NOT a v17-to-v23 delta",
+  "files": [
+    {
+      "path": "drivers/input/touchscreen/nt36532/nt36xxx.h",
+      "base_sha256": "c986759e2607d4608faca688dabae49a4c0c35cfef46cce5b2366d230a825574",
+      "kernel43_sha256": "6a4f1f5eb1f71198097bf2cc6090c41d54fa4c8b6d81810012ee4d746a320325"
+    },
+    {
+      "path": "drivers/input/touchscreen/nt36532/nt36xxx_fw_update.c",
+      "base_sha256": "ed9e9171c33ea2561d51d9e3614c12193d421dab329798f96c2bcfe5207d247a",
+      "kernel43_sha256": "858fb087aa0e2e39e939962a5eeeeaa6d604dd5ad36b6aa7a0837720a239f48f"
+    },
+    {
+      "path": "drivers/input/touchscreen/nt36532/nt36xxx.c",
+      "base_sha256": "e24dde956090f8bae3ad43e56da76b32c5ad859928693b49b9d2d77aee2fa855",
+      "kernel43_sha256": "c871a208c627cfbeecd38e03d5d33b76a53a13c6d710ad8ea80eaaff13ad1b67"
+    },
+    {
+      "path": "drivers/input/touchscreen/nt36532/nt36xxx_ext_proc.c",
+      "base_sha256": "c348eb1a4f09c45b7808841743f5b586581a679c64bf6c4768c39991b4abb3f3",
+      "kernel43_sha256": "99bd00a450d190ecbff1e7f2ae77d9fb0cb1963b6bc860770b06bc583eb5f9f3"
+    },
+    {
+      "path": "techpack/display/msm/dsi/dsi_display.c",
+      "base_sha256": "bbae29bc000496888b8bebf5f6c8418e2b08e0bb8e701f62871653ef235ff1ad",
+      "kernel43_sha256": "4e4f8be044f80075db9ddfb6e610ba5c25d26c03b334653cf4143d6b43f67325"
+    },
+    {
+      "path": "include/drm/drm_panel.h",
+      "base_sha256": "2ed2ab4d809a0f93e96a455ebe8296cb27448ca8717acc58ace4e20e15a2de51",
+      "kernel43_sha256": "a45d5115720bf2e2998da0d88bfb43d25f9bb04d40494816e639ef435f8bcd11"
+    },
+    {
+      "path": "techpack/display/msm/dsi/dsi_drm.c",
+      "base_sha256": "2f31f9f8e549ee1badc047b98fe880da108c9e8915e32127e66d7b0f2a17b1f8",
+      "kernel43_sha256": "1879118f5e85f6ce11208c2aa1348a8ec40131ac31083ad360594858992a4ea3"
+    },
+    {
+      "path": "techpack/display/msm/dsi/dsi_drm.h",
+      "base_sha256": "2a4985295409196b052d7b6b0ba58b67cf89b5981d9fe8b41d5e0a39e3935380",
+      "kernel43_sha256": "a5b39e3e60840a623e7403dd6d1fb99a1c621c0aad3aaaf4fea979f38dba8a30"
+    },
+    {
+      "path": "techpack/display/msm/dsi/dsi_panel.c",
+      "base_sha256": "516a65e27ed9cc6217cf00015f23811987d7bde103fc2298d91501d17301a4ad",
+      "kernel43_sha256": "a6cbcda94d64347a1ec016f171e914dbc116784c8dbc1e11ea92ec8012af0c3c"
+    },
+    {
+      "path": "techpack/display/msm/dsi/dsi_display.h",
+      "base_sha256": "0ebc4b55a0d59ad2fb70a0e3dfb90e65de0bb611fc1698dea2b2dd4fd1e63da6",
+      "kernel43_sha256": "b6497f22cdde923d9fa986b368e768162f88e1637eeb6cc2334661430b9b5e58"
+    },
+    {
+      "path": "drivers/usb/dwc3/dwc3-msm.c",
+      "base_sha256": "def5a63ef4176ec510636a396580c20dc8fe516c27e428f2c4280f2fa19b37ba",
+      "kernel43_sha256": "27d9254115b7375ce4f247e58324b7dac06a82a7815eecc819994ed5eb4b5502"
+    },
+    {
+      "path": "techpack/audio/asoc/codecs/tfa98xx/src/tfa98xx.c",
+      "base_sha256": "ed2f62de049933d95a0fcb8ace2ccf51746171b525ba413b886edde67a0d67f3",
+      "kernel43_sha256": "0f4b581a256734ec9249639e6f28e28e33946d480f16992d14796f841814881a"
+    },
+    {
+      "path": "techpack/audio/asoc/codecs/tfa98xx/inc/tfa98xx.h",
+      "base_sha256": "fcab3171eaf8689624014f31007d1ea6b2a71bf17538a6fd2d948d9b98c36885",
+      "kernel43_sha256": "3b58995fa9b9cd0121d5b32bdca2512dd4553b2c7241b4aa3af79111f0adc2c2"
+    },
+    {
+      "path": "techpack/audio/asoc/codecs/tfa98xx/inc/r94_route_core.h",
+      "base_sha256": null,
+      "kernel43_sha256": "5b2066fe7668d8511ecb27eb5d7c4ec1af32bf96aa6ba3d26668450295967bf5"
+    }
+  ]
+}

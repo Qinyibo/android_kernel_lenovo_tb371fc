@@ -1,0 +1,10 @@
+{
+  "state": "15_EXTRACTED_REAL_FUNCTION_FAILURE_AND_USER_INPUT_CASES_PASS",
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "hardware_and_notifiers_substituted": true,
+  "physical_acceptance": false,
+  "black_screen_root_cause_confirmed": false
+}

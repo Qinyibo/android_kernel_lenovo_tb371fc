@@ -10,3 +10,7 @@ Expected historical boot image SHA256: 09d3c1bd67946575de8b0dad434f651e746747da2
 drivers/net/oplus_vnet contains the actual external vnet module source/Makefile whose historical built module matches the ROM payload SHA256 01cb1335daddcf308d11076af1db50f5386c6bb94312243b02197d1a7bfc66bd. Build it with the matching configured kernel output and compiler; it is not silently enabled as a built-in driver by this export.
 
 Upstream lineage includes Linux, Qualcomm/Android and the TB371FC kernel project previously referenced as https://github.com/smith-dog/kernel-tb371fc . This working baseline was preserved without a .git history directory; this release does not invent upstream history or authorship. Generated objects, local signing private keys and machine credentials are excluded. This repository contains source and configuration, not personal tablet data or private keys.
+
+## Development records
+
+See [docs/tb371fc](docs/tb371fc/README.md) for the stock11-to-kernel43 patch, source hashes, IRQ/Hall/PM design notes and historical test scope. The ROM-side research history and failed performance trials are documented in [TB371FC-ColorOS16/docs](https://github.com/Qinyibo/TB371FC-ColorOS16/tree/main/docs).
