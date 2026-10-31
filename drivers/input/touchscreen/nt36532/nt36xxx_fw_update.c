@@ -17,6 +17,7 @@
  */
 
 #include <linux/firmware.h>
+#include <linux/module.h>
 #include <linux/gpio.h>
 
 #include "nt36xxx.h"
@@ -25,6 +26,24 @@
 
 static ktime_t start, end;
 const struct firmware *fw_entry = NULL;
+/* All downloader callers serialize on ts->lock. Keep the selected boot blob
+ * resident across OFF/ON: resume must not need a userspace firmware fallback
+ * while the display transition owner and touch lock are held. Only the file
+ * acquisition is cached; header parsing, full download and CRC/INIT/REK gates
+ * still run for every recovery. The vendor boot image is immutable per boot. */
+static const struct firmware *nvt_boot_fw_cache;
+static unsigned int nvt_fw_cache_hits, nvt_fw_file_requests;
+module_param_named(r94_fw_cache_hits, nvt_fw_cache_hits, uint, 0444);
+module_param_named(r94_fw_file_requests, nvt_fw_file_requests, uint, 0444);
+
+void nvt_firmware_cache_release(void)
+{
+    lockdep_assert_held(&ts->lock);
+    if (fw_entry == nvt_boot_fw_cache)
+        fw_entry = NULL;
+    release_firmware(nvt_boot_fw_cache);
+    nvt_boot_fw_cache = NULL;
+}
 static size_t fw_need_write_size = 0;
 static uint8_t *fwbuf = NULL;
 
@@ -312,7 +331,7 @@ return:
 *******************************************************/
 static void update_firmware_release(void)
 {
-	if (fw_entry) {
+	if (fw_entry && fw_entry != nvt_boot_fw_cache) {
 		release_firmware(fw_entry);
 	}
 
@@ -338,7 +357,15 @@ static int32_t update_firmware_request(char *filename)
 	while (1) {
 		NVT_LOG("filename is %s\n", filename);
 
-		ret = request_firmware(&fw_entry, filename, &ts->client->dev);
+        if (nvt_boot_fw_cache && BOOT_UPDATE_FIRMWARE_NAME &&
+            !strcmp(filename, BOOT_UPDATE_FIRMWARE_NAME)) {
+            fw_entry = nvt_boot_fw_cache;
+            nvt_fw_cache_hits++;
+            ret = 0;
+        } else {
+            nvt_fw_file_requests++;
+            ret = request_firmware(&fw_entry, filename, &ts->client->dev);
+        }
 		if (ret) {
 			NVT_ERR("firmware load failed, ret=%d\n", ret);
 			goto request_fail;
@@ -364,11 +391,13 @@ static int32_t update_firmware_request(char *filename)
 		if (ret) {
 			NVT_ERR("bin header parser failed\n");
 			goto invalid;
-		} else {
-			break;
-		}
+        } else {
+            break;
+        }
 
 invalid:
+        if (fw_entry && fw_entry == nvt_boot_fw_cache)
+            nvt_firmware_cache_release();
 		update_firmware_release();
 		if (!IS_ERR_OR_NULL(bin_map)) {
 			kfree(bin_map);
@@ -866,6 +895,11 @@ int32_t nvt_update_firmware(char *firmware_name)
 	if (ret) {
 		NVT_ERR("nvt_get_fw_info failed. (%d)\n", ret);
 	}
+    if (!ret && !nvt_boot_fw_cache && BOOT_UPDATE_FIRMWARE_NAME &&
+        !strcmp(firmware_name, BOOT_UPDATE_FIRMWARE_NAME)) {
+        nvt_boot_fw_cache = fw_entry;
+        NVT_LOG("R94_BOOT_FW_CACHED size=%zu\n", fw_entry->size);
+    }
 	if (ts->nvt_charger_notify_wq != NULL)
 		queue_work(ts->nvt_charger_notify_wq, &ts->charger_notify_work);
 /*Spinel code for charging by wangxin77 at 2023/03/06 end*/

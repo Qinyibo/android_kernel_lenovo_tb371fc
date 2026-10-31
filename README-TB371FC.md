@@ -1,3 +1,19 @@
+# Current candidate: wake-cache-r1 (2026-10-31)
+
+Main now carries the three touchscreen inputs actually compiled into the flashed wake-cache-r1 Image. The historical #43 baseline is commit 9bed5276d6526438208cd488b71292a725b68d4d; the hashes below describe that historical baseline, not the new candidate.
+
+See [candidate source, observations and validation](docs/tb371fc/wake-cache-r1/README.md). Physical double-tap still fails. A user-reported long idle was followed by a normal power-button wake, which is encouraging but does not confirm the original black-screen root cause.
+
+The default build metadata identifies r94-wake-cache-r1, #43, Sat Oct 31 2026 12:00:00 +0800. Configuration and existing module exports match the prior build. The actual source hashes, Image/boot hashes and local build receipt are published with the candidate; a bit-identical rebuild from the newly published Git tree is not asserted.
+
+Run the portable extracted-function tests in Linux:
+
+    python3 build/tb371fc/test-firmware-cache.py
+
+The compiler runtime provisioning note below still applies. No proprietary firmware blob, boot ramdisk or local signing key is included in this source commit.
+
+---
+
 # TB371FC ColorOS16 kernel43 corresponding source
 
 This is the complete Linux 4.19 source used as the kernel43 build baseline, with the exact touch/USB/display/audio files from the verified kernel43 build folded into the tree. Original copyright and license notices are retained; see COPYING and component headers. It is not a claim that proprietary ColorOS framework/application sources are available.

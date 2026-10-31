@@ -1,0 +1,18 @@
+{
+  "base_commit": "9bed5276d6526438208cd488b71292a725b68d4d",
+  "base_boot_sha256": "09d3c1bd67946575de8b0dad434f651e746747da2686fa227719142ad47cfbbe",
+  "changes": {
+    "drivers/input/touchscreen/nt36532/nt36xxx.c": {
+      "before": "c871a208c627cfbeecd38e03d5d33b76a53a13c6d710ad8ea80eaaff13ad1b67",
+      "after": "01c144a23d69008ffcbe4c7005f45850e21a83a1274f138f01fb7e88f486d7bb"
+    },
+    "drivers/input/touchscreen/nt36532/nt36xxx.h": {
+      "before": "6a4f1f5eb1f71198097bf2cc6090c41d54fa4c8b6d81810012ee4d746a320325",
+      "after": "da28ada6684055f2c07f969ec14ee7230ddbfe8ab11eb0db95bd91739ee9043d"
+    },
+    "drivers/input/touchscreen/nt36532/nt36xxx_fw_update.c": {
+      "before": "858fb087aa0e2e39e939962a5eeeeaa6d604dd5ad36b6aa7a0837720a239f48f",
+      "after": "38d6ab7c628704dc839da4016837b79c01a4f99741862bac0581d33a855e1e34"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+/* This file is auto generated, version 43 */
+/* SMP PREEMPT */
+#define UTS_MACHINE "aarch64"
+#define UTS_VERSION "#43 SMP PREEMPT Sat Oct 31 2026 12:00:00 +0800"
+#define LINUX_COMPILE_BY "tb371fc-offline"
+#define LINUX_COMPILE_HOST "r94-wake-cache-r1"
+#define LINUX_COMPILER "Ubuntu clang version 21.1.8 (++20251221032922+2078da43e25a-1~exp1~20251221153059.70), GNU ld (GNU Binutils for Ubuntu) 2.42"
+
+ACTUAL_BUILD_INPUTS_CONFIG_IMAGE_AND_VENDOR_EXPORTS_MATCH

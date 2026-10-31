@@ -355,6 +355,7 @@ void nvt_fw_crc_enable(void);
 void nvt_tx_auto_copy_mode(void);
 void nvt_read_fw_history(uint32_t fw_history_addr);
 int32_t nvt_update_firmware(char *firmware_name);
+void nvt_firmware_cache_release(void);
 int32_t nvt_check_fw_reset_state(RST_COMPLETE_STATE check_reset_state);
 int32_t nvt_get_fw_info(void);
 int32_t nvt_clear_fw_status(void);

@@ -240,6 +240,45 @@ static uint32_t nvt_panel_resume_id;
 /* Protected by the panel transition owner. A verified PREPARE already
  * fulfills the boot download; the delayed worker must not repeat it. */
 static bool nvt_panel_fw_restored;
+enum r94_wake_stage {
+    R94_WAKE_IDLE, R94_WAKE_SUSPEND, R94_WAKE_ASLEEP,
+    R94_WAKE_PM_ENTER, R94_WAKE_PM_ASLEEP, R94_WAKE_PM_RESUMED,
+    R94_WAKE_IRQ_PM_WAIT, R94_WAKE_GESTURE, R94_WAKE_PREPARE,
+    R94_WAKE_FIRMWARE, R94_WAKE_PREPARED, R94_WAKE_ARMED,
+    R94_WAKE_COMMIT, R94_WAKE_AWAKE, R94_WAKE_ABORT,
+    R94_WAKE_HALL_CLOSED, R94_WAKE_WDT_CLOSED
+};
+static unsigned int r94_wake_stage, r94_wake_error_stage;
+static unsigned int r94_wake_gestures, r94_wake_last_gesture;
+static unsigned int r94_wake_pm_timeouts;
+static int r94_wake_errno, r94_wake_sleep_hall = -1;
+static bool r94_wake_irq, r94_wake_irq_armed;
+
+static void r94_wake_error(unsigned int stage, int error)
+{
+    WRITE_ONCE(r94_wake_error_stage, stage);
+    WRITE_ONCE(r94_wake_errno, error);
+}
+
+static int r94_wake_state_get(char *buffer, const struct kernel_param *kp)
+{
+    return scnprintf(buffer, PAGE_SIZE,
+        "stage=%u err_stage=%u errno=%d awake=%u pending=%u armed=%u failed=%u "
+        "gesture=%u hall_at_sleep=%d irq=%u irq_wake=%u gestures=%u "
+        "last_gesture=%u pm_timeouts=%u\n",
+        READ_ONCE(r94_wake_stage), READ_ONCE(r94_wake_error_stage),
+        READ_ONCE(r94_wake_errno), READ_ONCE(bTouchIsAwake),
+        READ_ONCE(nvt_panel_resume_pending), READ_ONCE(nvt_panel_resume_armed),
+        READ_ONCE(nvt_panel_resume_failed), READ_ONCE(nvt_gesture_flag),
+        READ_ONCE(r94_wake_sleep_hall), READ_ONCE(r94_wake_irq),
+        READ_ONCE(r94_wake_irq_armed), READ_ONCE(r94_wake_gestures),
+        READ_ONCE(r94_wake_last_gesture), READ_ONCE(r94_wake_pm_timeouts));
+}
+
+static const struct kernel_param_ops r94_wake_state_ops = {
+    .get = r94_wake_state_get,
+};
+module_param_cb(r94_wake_state, &r94_wake_state_ops, NULL, 0444);
 /* R94v41: IRQ faults quarantine packets immediately. A process-context owner
  * drains the IRQ before publishing failed/asleep state. Only a verified boot
  * recovery or native COMMIT clears this flag. */
@@ -279,6 +318,9 @@ static void nvt_irq_enable(bool enable)
 		}
 	}
 
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_irq, ts->irq_enabled);
+#endif
 	desc = irq_to_desc(ts->client->irq);
 	NVT_LOG("enable=%d, desc->depth=%d\n", enable, desc->depth);
 }
@@ -302,6 +344,11 @@ static int nvt_irq_wake_ctrl_locked(bool enable)
     else
         NVT_ERR("R94_IRQ_WAKE_FAILED enable=%d ret=%d owned=%d\n",
                 enable, ret, ts->irq_wake_enabled);
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_irq_armed, ts->irq_wake_enabled);
+    if (ret)
+        r94_wake_error(READ_ONCE(r94_wake_stage), ret);
+#endif
     return ret;
 }
 
@@ -319,6 +366,7 @@ static void nvt_wdt_sleep_close_irq(struct work_struct *work)
         mutex_lock(&ts->lock);
         (void)nvt_irq_wake_ctrl_locked(false);
         mutex_unlock(&ts->lock);
+        WRITE_ONCE(r94_wake_stage, R94_WAKE_WDT_CLOSED);
         NVT_LOG("R94_SLEEP_WDT_IRQ_CLOSED epoch=%u\n", nvt_sleep_epoch);
     }
     mutex_unlock(&nvt_panel_transition_lock);
@@ -1328,6 +1376,11 @@ void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 	}
 
 	if (keycode > 0) {
+#if defined(CONFIG_DRM_PANEL)
+        WRITE_ONCE(r94_wake_stage, R94_WAKE_GESTURE);
+        WRITE_ONCE(r94_wake_last_gesture, gesture_id);
+        r94_wake_gestures++;
+#endif
 		/* TB371FC p146: report on the dedicated wake keyboard device.
 		 * ZUI input policy (mTpWakeUp=false) drops wake attempts from
 		 * the touch panel device, so report like a power button. */
@@ -1554,6 +1607,11 @@ static bool nvt_hall_sleep_update(void)
     WRITE_ONCE(hall_status, 0);
     WRITE_ONCE(nvt_hall_pm, 0);
     WRITE_ONCE(nvt_hall_pm_status, 1);
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_HALL_CLOSED);
+    if (ret)
+        r94_wake_error(R94_WAKE_HALL_CLOSED, ret);
+#endif
     NVT_LOG("R94_HALL_SLEEP_CLOSED cmd_ret=%d wake_ret=%d owned=%d\n",
             ret, wake_ret, ts->irq_wake_enabled);
     mutex_unlock(&ts->lock);
@@ -1816,8 +1874,15 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 #if WAKEUP_GESTURE
 #ifdef CONFIG_PM
 		if (ts->dev_pm_suspend) {
+#if defined(CONFIG_DRM_PANEL)
+            WRITE_ONCE(r94_wake_stage, R94_WAKE_IRQ_PM_WAIT);
+#endif
 			ret = wait_for_completion_timeout(&ts->dev_pm_resume_completion, msecs_to_jiffies(700));
 			if (!ret) {
+#if defined(CONFIG_DRM_PANEL)
+                r94_wake_pm_timeouts++;
+                r94_wake_error(R94_WAKE_IRQ_PM_WAIT, -ETIMEDOUT);
+#endif
 				NVT_ERR("system(bus) can't finished resuming procedure, skip it\n");
 				return IRQ_HANDLED;
 			}
@@ -3172,6 +3237,9 @@ err_create_nvt_esd_check_wq_failed:
 		nvt_fwu_wq = NULL;
 	}
 err_create_nvt_fwu_wq_failed:
+    mutex_lock(&ts->lock);
+    nvt_firmware_cache_release();
+    mutex_unlock(&ts->lock);
 #endif
 /*Spinel code for charging by wangxin77 at 2023/03/06 start*/
 	if (ts->nvt_charger_notify_wq) {
@@ -3338,6 +3406,11 @@ static int32_t nvt_ts_remove(struct spi_device *client)
 #endif
 
     nvt_ts_drain_work();
+#if BOOT_UPDATE_FIRMWARE
+    mutex_lock(&ts->lock);
+    nvt_firmware_cache_release();
+    mutex_unlock(&ts->lock);
+#endif
 
 #if WAKEUP_GESTURE
 	device_init_wakeup(&ts->input_dev->dev, 0);
@@ -3422,6 +3495,11 @@ static void nvt_ts_shutdown(struct spi_device *client)
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
 
     nvt_ts_drain_work();
+#if BOOT_UPDATE_FIRMWARE
+    mutex_lock(&ts->lock);
+    nvt_firmware_cache_release();
+    mutex_unlock(&ts->lock);
+#endif
 
 #if WAKEUP_GESTURE
 	device_init_wakeup(&ts->input_dev->dev, 0);
@@ -3611,6 +3689,10 @@ static int32_t nvt_ts_suspend(struct device *dev)
 			     nvt_panel_suspend_pending_abort;
 	// int ret = -1;
 	hall_work_status = gpio_get_value(1275);
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_sleep_hall, hall_work_status);
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_SUSPEND);
+#endif
 	/* Spinel code for OSPINEL-6824 by gaobw1 at 2023/6/8 end */
 	/* Already-suspended notifications must not cancel the active Hall work. */
 	if (!was_awake && !pending_abort) {
@@ -3734,6 +3816,11 @@ suspend_mode_done:
 
 	msleep(50);
 
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_ASLEEP);
+    if (ret)
+        r94_wake_error(R94_WAKE_SUSPEND, ret);
+#endif
 	NVT_LOG("end\n");
 
 	if (ret)
@@ -3822,6 +3909,7 @@ static int32_t nvt_ts_resume(struct device *dev)
 static int nvt_resume_fw_restore(void)
 {
     int ret = 0;
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_FIRMWARE);
     mutex_lock(&ts->lock);
 #if NVT_TOUCH_WDT_RECOVERY
     if (nvt_wdt_deferred_pending || nvt_resume_prev_failed) {
@@ -3850,8 +3938,10 @@ done:
 #endif
         nvt_panel_fw_restored = true;
         WRITE_ONCE(nvt_panel_resume_pending, true);
+        WRITE_ONCE(r94_wake_stage, R94_WAKE_PREPARED);
         NVT_LOG("R94_PREPARED full_fw_verified IRQ_CLOSED\n");
     } else {
+        r94_wake_error(R94_WAKE_FIRMWARE, ret);
         NVT_ERR("R94_PREPARE_FAILED %d IRQ_CLOSED\n", ret);
     }
     mutex_unlock(&ts->lock);
@@ -3861,6 +3951,7 @@ done:
 static int nvt_panel_resume_prepare(struct device *dev, uint32_t id)
 {
     int ret;
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_PREPARE);
 #if NVT_HALL_CHECK
     cancel_delayed_work_sync(&nvt_hall_check_work);
 #endif
@@ -3920,8 +4011,10 @@ static int nvt_panel_resume_arm(struct device *dev, uint32_t id)
         ret = -ESTALE;
     else if (!nvt_panel_resume_pending)
         ret = bTouchIsAwake ? 0 : -EAGAIN;
-    else
+    else {
         nvt_panel_resume_armed = true;
+        WRITE_ONCE(r94_wake_stage, R94_WAKE_ARMED);
+    }
     mutex_unlock(&ts->lock);
     return ret;
 }
@@ -3929,6 +4022,7 @@ static int nvt_panel_resume_arm(struct device *dev, uint32_t id)
 static int nvt_panel_resume_commit(struct device *dev, uint32_t id)
 {
     int ret = 0;
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_COMMIT);
     mutex_lock(&ts->lock);
     if (!id || id != nvt_panel_resume_id) {
         ret = -ESTALE;
@@ -3944,6 +4038,7 @@ static int nvt_panel_resume_commit(struct device *dev, uint32_t id)
     }
     ret = nvt_check_fw_reset_state(RESET_STATE_REK);
     if (ret) {
+        r94_wake_error(R94_WAKE_COMMIT, ret);
         NVT_ERR("R94_NATIVE_COMPLETE_REK_FAILED %d IRQ_CLOSED_DISPLAY_RETAINED\n", ret);
         goto out;
     }
@@ -3967,6 +4062,7 @@ static int nvt_panel_resume_commit(struct device *dev, uint32_t id)
      * only after the real REK gate has passed. queue_work coalesces overlap. */
     if (ts->nvt_charger_notify_wq != NULL)
         queue_work(ts->nvt_charger_notify_wq, &ts->charger_notify_work);
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_AWAKE);
     NVT_LOG("R94_NATIVE_COMPLETE_COMMITTED real_REK_verified IRQ_OPEN\n");
 out:
     mutex_unlock(&ts->lock);
@@ -3977,6 +4073,7 @@ static int nvt_panel_resume_abort(struct device *dev, uint32_t id)
 {
     uint8_t buf[2] = { EVENT_MAP_HOST_CMD, 0x11 };
     int ret = 0;
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_ABORT);
     /* Ignore a stale abort without touching a newer prepared/awake session. */
     mutex_lock(&ts->lock);
     if (!id || id != nvt_panel_resume_id) {
@@ -4211,10 +4308,14 @@ static int nvt_ts_pm_suspend(struct device *dev)
 	pr_info("%s:++\n", __func__);
 
 #if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_PM_ENTER);
 	mutex_lock(&nvt_panel_transition_lock);
 #endif
 	reinit_completion(&ts->dev_pm_resume_completion);
 	WRITE_ONCE(ts->dev_pm_suspend, true);
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_PM_ASLEEP);
+#endif
 #if defined(CONFIG_DRM_PANEL)
 	mutex_unlock(&nvt_panel_transition_lock);
 #endif
@@ -4228,6 +4329,9 @@ static int nvt_ts_pm_resume(struct device *dev)
     /* Release any IRQ thread waiting for PM before trying the panel owner. */
     WRITE_ONCE(ts->dev_pm_suspend, false);
     complete(&ts->dev_pm_resume_completion);
+#if defined(CONFIG_DRM_PANEL)
+    WRITE_ONCE(r94_wake_stage, R94_WAKE_PM_RESUMED);
+#endif
 #if NVT_HALL_CHECK
     if (READ_ONCE(nvt_hall_pm) && !READ_ONCE(nvt_hall_pm_status))
         (void)nvt_hall_sleep_update();

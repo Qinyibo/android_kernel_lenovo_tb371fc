@@ -1,0 +1,31 @@
+{
+  "candidate": "wake-cache-r1-20261031",
+  "kernel_base_commit": "9bed5276d6526438208cd488b71292a725b68d4d",
+  "flashed": true,
+  "data_wiped": false,
+  "boot_completed": true,
+  "root_available": true,
+  "short_software_wake_pass": true,
+  "physical_double_tap": "USER_CONFIRMED_STILL_FAILS",
+  "firmware_file_requests_before_and_after_short_wake": [
+    1,
+    1
+  ],
+  "firmware_cache_hits_before_and_after_short_wake": [
+    0,
+    1
+  ],
+  "manual_followup": {
+    "gesture_enabled": true,
+    "hall_at_sleep": 1,
+    "irq_enabled": true,
+    "irq_wake_enabled": true,
+    "reported_gestures": 0,
+    "pm_timeouts": 0,
+    "key_event_captured": false
+  },
+  "long_idle": "USER_REPORTED_NORMAL_POWER_BUTTON_WAKE_AFTER_LONG_IDLE",
+  "controlled_long_idle_test": false,
+  "black_screen_root_cause_confirmed": false,
+  "deep_suspend_success_count_at_readback": 0
+}

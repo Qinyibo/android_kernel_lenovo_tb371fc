@@ -1,0 +1,46 @@
+{
+  "state": "CANDIDATE_BUILT_AND_PACKED_NOT_FLASHED",
+  "base_commit": "9bed5276d6526438208cd488b71292a725b68d4d",
+  "actual_linux_source": "/work/tb371fc-wake-20261031/src",
+  "actual_linux_output": "/work/tb371fc-wake-20261031/out",
+  "build_host": "r94-wake-cache-r1",
+  "kernel_release": "4.19.325-perf+",
+  "compiler": "Ubuntu clang 21.1.8; GNU aarch64 binutils 2.42",
+  "configured_build_timestamp": "Sat Oct 31 2026 12:00:00 +0800",
+  "kernel43_config_identical": true,
+  "existing_module_exports_identical": true,
+  "boot_non_kernel_payloads_identical": true,
+  "boot_header_only_allowed_derived_fields_changed": true,
+  "extracted_function_tests_passed": 12,
+  "test_sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "hardware_and_firmware_loader_stubs": true,
+  "physical_double_tap_verified": false,
+  "long_idle_verified": false,
+  "black_screen_root_cause_confirmed": false,
+  "device_modified": false,
+  "files": {
+    "Image-wake-cache-r1": {
+      "bytes": 50892816,
+      "sha256": "58ffeb6e5776d622bd45f917bae4760c4fbb34229506a68e9df28b9769c8a0de"
+    },
+    "boot-wake-cache-r1.img": {
+      "bytes": 100663296,
+      "sha256": "8e0a355571cfdc04b749906b1056189fa94937d0e10f4d6f6e072a2c96a8cb8a"
+    },
+    "rollback/boot-v23-original.img": {
+      "bytes": 100663296,
+      "sha256": "09d3c1bd67946575de8b0dad434f651e746747da2686fa227719142ad47cfbbe"
+    },
+    "source/kernel.config": {
+      "bytes": 174218,
+      "sha256": "4dcaebca4ccca59c5172b4e6c573bea22ed5b039a1cb8eab0fa45ff39bc6bf52"
+    },
+    "source/Module.symvers-wake-cache-r1": {
+      "bytes": 724054,
+      "sha256": "c3343c7eae0596056f602a24f2ba301d7b5892b3235f774cf01bb1a3048e711c"
+    }
+  }
+}

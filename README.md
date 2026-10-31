@@ -1,3 +1,17 @@
+# TB371FC ColorOS16 · wake-cache-r1 候选
+
+当前 main 是2026-10-31已构建并刷入的唤醒候选，基于此前公开的 #43 源码。它不是已经验收的稳定修复。
+
+用户最新反馈：双击亮屏仍然失败；长时间放置后电源键正常亮屏，比此前必须强制重启的现象有改善。长待机黑屏的根因和跨场景可靠性尚未确认。
+
+- [本版改动、实机反馈及代码审阅入口](docs/tb371fc/wake-cache-r1/README.md)
+- [构建说明与历史基线](README-TB371FC.md)
+- [ROM配套记录](https://github.com/Qinyibo/TB371FC-ColorOS16/blob/main/docs/wake-cache-r1.md)
+
+下方保留上游原始README作为来源记录，其中版本号、设备年份、功能可用性和下载地址不直接代表本ColorOS移植的验收状态。当前状态以上面的候选记录为准。
+
+---
+
 # TB371FC Custom Kernel — 4.19.325-perf++
 
 联想小新 Pad Pro 12.7 2021（TB371FC，高通 SM8250/kona）的自定义内核。

@@ -1,0 +1,90 @@
+make[1]: Entering directory '/work/tb371fc-wake-20261031/out'
+  GEN     ./Makefile
+make[1]: Leaving directory '/work/tb371fc-wake-20261031/out'
+make[1]: Entering directory '/work/tb371fc-wake-20261031/out'
+  Using /work/tb371fc-wake-20261031/src as source for kernel
+make[1]: Leaving directory '/work/tb371fc-wake-20261031/out'
+  CALL    /work/tb371fc-wake-20261031/src/scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+/work/tb371fc-wake-20261031/src/techpack/audio/ipc/Kbuild:1: DBG ipc: KONA=y AUDIO_ROOT= APRCFG=y
+-- KDIR: 
+-- MDIR: /work/tb371fc-wake-20261031/src/drivers/kernelsu
+-- KernelSU Manager signature size: 0x033b
+-- KernelSU Manager signature hash: c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6
+-- KernelSU/compat: iterate_dir found!
+-- KernelSU/compat: f_op->read_iter found!
+  CC      techpack/audio/ipc/apr_v2.o
+  CC      techpack/audio/ipc/apr_tal_rpmsg.o
+  CC      techpack/audio/ipc/apr.o
+  AR      techpack/audio/ipc/built-in.a
+  CC      drivers/input/touchscreen/nt36532/nt36xxx_fw_update.o
+  CC      drivers/input/touchscreen/nt36532/nt36xxx_ext_proc.o
+  CC      drivers/input/touchscreen/nt36532/nt36xxx.o
+  CC      drivers/input/touchscreen/nt36532/nt36xxx_mp_ctrlram.o
+  AR      drivers/input/touchscreen/nt36532/built-in.a
+  AR      drivers/input/touchscreen/built-in.a
+  AR      drivers/input/built-in.a
+  AR      techpack/audio/built-in.a
+  CHK     kernel/kheaders_data.tar.xz
+  AR      techpack/built-in.a
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+  CC      drivers/staging/qcacld-3.0/core/hdd/src/wlan_hdd_main.o
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/core/hdd/src/wlan_hdd_main.c:27:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/wbuff/inc/wbuff.h:28:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/inc/qdf_nbuf.h:29:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/inc/qdf_lock.h:28:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/inc/qdf_mem.h:29:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/linux/src/i_qdf_mem.h:62:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/core/pld/inc/pld_common.h:25:
+/work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/uapi/linux/osapi_linux.h:48:9: warning: '__ATTRIB_PACK' macro redefined [-Wmacro-redefined]
+   48 | #define __ATTRIB_PACK           __attribute__ ((packed))
+      |         ^
+/work/tb371fc-wake-20261031/src/drivers/staging/fw-api/fw/p226_compat.h:20:9: note: previous definition is here
+   20 | #define __ATTRIB_PACK __attribute__((packed))
+      |         ^
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/core/hdd/src/wlan_hdd_main.c:27:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/wbuff/inc/wbuff.h:28:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/inc/qdf_nbuf.h:29:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/inc/qdf_lock.h:28:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/inc/qdf_mem.h:29:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/../qca-wifi-host-cmn/qdf/linux/src/i_qdf_mem.h:62:
+In file included from /work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/core/pld/inc/pld_common.h:25:
+/work/tb371fc-wake-20261031/src/drivers/staging/qcacld-3.0/uapi/linux/osapi_linux.h:64:9: warning: 'POSTPACK' macro redefined [-Wmacro-redefined]
+   64 | #define POSTPACK                __attribute__((packed)) /* p227 */
+      |         ^
+/work/tb371fc-wake-20261031/src/drivers/staging/fw-api/fw/p226_compat.h:16:9: note: previous definition is here
+   16 | #define POSTPACK
+      |         ^
+2 warnings generated.
+  AR      drivers/staging/qcacld-3.0/built-in.a
+  AR      drivers/staging/built-in.a
+  AR      drivers/built-in.a
+  GEN     .version
+  CHK     include/generated/compile.h
+  AR      built-in.a
+  MODPOST vmlinux.o
+aarch64-linux-gnu-ld: warning: -z norelro ignored
+  KSYM    .tmp_kallsyms1.o
+aarch64-linux-gnu-ld: warning: -z norelro ignored
+  KSYM    .tmp_kallsyms2.o
+  LD      vmlinux
+aarch64-linux-gnu-ld: warning: -z norelro ignored
+  SORTEX  vmlinux
+  SYSMAP  System.map
+find: ‘arch/arm64/boot/dts/’: No such file or directory
+  OBJCOPY arch/arm64/boot/Image
