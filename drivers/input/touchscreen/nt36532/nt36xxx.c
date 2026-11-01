@@ -3929,6 +3929,21 @@ static int nvt_resume_fw_restore(void)
     }
 #endif
     ret = nvt_update_firmware(BOOT_UPDATE_FIRMWARE_NAME);
+#if NVT_TOUCH_SUPPORT_HW_RST
+    /* A bootloader-only retry cannot recover a stuck touchscreen MCU.
+     * Retry once with the same hardware reset sequence used by the existing
+     * non-HWCRC downloader, before the panel receives its wake commands. */
+    if (ret && gpio_is_valid(ts->reset_gpio)) {
+        NVT_ERR("R94_FW_HW_RESET_RETRY previous=%d\n", ret);
+        gpio_set_value(ts->reset_gpio, 0);
+        mdelay(1);
+        nvt_eng_reset();
+        gpio_set_value(ts->reset_gpio, 1);
+        mdelay(10);
+        ret = nvt_update_firmware(BOOT_UPDATE_FIRMWARE_NAME);
+        NVT_LOG("R94_FW_HW_RESET_RESULT ret=%d\n", ret);
+    }
+#endif
 done:
     /* The downloader retains its own CRC and INIT verification. */
     if (!ret) {
