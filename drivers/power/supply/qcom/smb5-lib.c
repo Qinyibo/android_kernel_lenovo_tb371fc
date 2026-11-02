@@ -2521,14 +2521,15 @@ int smblib_get_prop_batt_charge_done(struct smb_charger *chg,
 	return 0;
 }
 
-int smblib_get_batt_current_now(struct smb_charger *chg,
-					union power_supply_propval *val)
+int smblib_get_batt_current(struct smb_charger *chg,
+				   enum power_supply_property psp,
+				   union power_supply_propval *val)
 {
 	int rc;
-	rc = smblib_get_prop_from_exfg(chg,
-		POWER_SUPPLY_PROP_CURRENT_NOW, val);
+	rc = smblib_get_prop_from_exfg(chg, psp, val);
 
-	if (!chg->exfg_psy){
+	/* The battery interface uses positive current for net charging. */
+	if (!rc && !chg->exfg_psy) {
 		val->intval *= (-1);
 	}
 

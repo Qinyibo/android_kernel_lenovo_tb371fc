@@ -731,8 +731,9 @@ int smblib_get_prop_batt_charge_type(struct smb_charger *chg,
 				union power_supply_propval *val);
 int smblib_get_prop_batt_charge_done(struct smb_charger *chg,
 				union power_supply_propval *val);
-int smblib_get_batt_current_now(struct smb_charger *chg,
-					union power_supply_propval *val);
+int smblib_get_batt_current(struct smb_charger *chg,
+				   enum power_supply_property psp,
+				   union power_supply_propval *val);
 int smblib_get_prop_batt_health(struct smb_charger *chg,
 				union power_supply_propval *val);
 int smblib_get_prop_system_temp_level(struct smb_charger *chg,
