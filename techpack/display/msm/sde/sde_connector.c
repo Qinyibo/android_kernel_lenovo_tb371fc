@@ -2618,8 +2618,18 @@ static void _sde_connector_report_panel_dead(struct sde_connector *conn,
  * the existing userspace panel-recovery path without touching dead clocks. */
 void sde_connector_report_enable_failure(struct drm_connector *connector)
 {
-	if (connector)
-		_sde_connector_notify_panel_dead(to_sde_connector(connector));
+	struct sde_connector *c_conn;
+
+	if (!connector)
+		return;
+	c_conn = to_sde_connector(connector);
+	/* DIAGNOSTIC: sticky panel_dead suppresses renotify (rate-limited). */
+	if (c_conn->panel_dead) {
+		pr_err_once("R97_DIAG PANEL_DEAD_STICKY skip_renotify conn_id=%d\n",
+				connector->base.id);
+		return;
+	}
+	_sde_connector_notify_panel_dead(c_conn);
 }
 
 int sde_connector_esd_status(struct drm_connector *conn)

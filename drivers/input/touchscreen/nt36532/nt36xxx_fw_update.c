@@ -637,6 +637,26 @@ static void nvt_set_bld_hw_crc(void)
 			ts->mmap->G_DLM_CHECKSUM_ADDR, bin_map[1].crc);
 }
 
+/* Called only under the downloader owner after a failed INIT check. */
+static void nvt_diag_boot_reg(const char *name, uint32_t addr, uint8_t mask)
+{
+	uint8_t buf[2] = { addr & 0x7F, 0 };
+	int ret;
+
+	if (!addr) {
+		NVT_ERR("R97_DIAG %s unavailable\n", name);
+		return;
+	}
+	ret = nvt_set_page(addr);
+	if (!ret)
+		ret = CTP_SPI_READ(ts->client, buf, sizeof(buf));
+	if (ret)
+		NVT_ERR("R97_DIAG %s addr=0x%06X read_failed ret=%d\n", name, addr, ret);
+	else
+		NVT_ERR("R97_DIAG %s=0x%02X addr=0x%06X mask=0x%02X\n",
+				name, buf[1], addr, mask);
+}
+
 /*******************************************************
 Description:
 	Novatek touchscreen read BLD hw crc info function.
@@ -701,6 +721,27 @@ static void nvt_read_bld_hw_crc(void)
 
 	NVT_ERR("dlm: bin crc = 0x%08X, golden = 0x%08X, result = 0x%08X\n",
 			bin_map[1].crc, g_crc, r_crc);
+
+	/* Diagnostic reads must not turn a bus failure into a zero value. */
+	nvt_diag_boot_reg("dma_crc_flag", ts->mmap->DMA_CRC_FLAG_ADDR, 0xFF);
+	nvt_diag_boot_reg("crc_err_flag", ts->crc_err_flag_addr, 0xFF);
+	nvt_diag_boot_reg("boot_rdy", ts->mmap->BOOT_RDY_ADDR, 0xFF);
+	nvt_diag_boot_reg("enb_casc_raw", ts->mmap->ENB_CASC_REG.addr,
+			ts->mmap->ENB_CASC_REG.mask);
+	{
+		int diag_ret;
+
+		diag_ret = nvt_set_page(ts->mmap->EVENT_BUF_ADDR |
+				EVENT_MAP_RESET_COMPLETE);
+		buf[0] = EVENT_MAP_RESET_COMPLETE;
+		if (!diag_ret)
+			diag_ret = CTP_SPI_READ(ts->client, buf, 6);
+		if (diag_ret)
+			NVT_ERR("R97_DIAG reset_state read_failed ret=%d\n", diag_ret);
+		else
+			NVT_ERR("R97_DIAG reset_state=0x%02X 0x%02X 0x%02X 0x%02X 0x%02X\n",
+					buf[1], buf[2], buf[3], buf[4], buf[5]);
+	}
 
 	return;
 }
