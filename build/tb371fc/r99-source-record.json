@@ -1,0 +1,131 @@
+{
+  "status": "locally recorded deployed r99; not a new release or new hardware validation",
+  "git_baseline": "ad9987077d8eb726a1be70801a2b7aa12e886b54",
+  "code_commit": "410ce6743e6192021e1dbc4dba14c17865eb65b8",
+  "code_history": [
+    {
+      "phase": "r6",
+      "commit": "1f6fc1fb5e47d5bf2447cd54173da213d3772008",
+      "tree": "e9e5f0817fb85899b663853eb3ed7308cc77d971",
+      "subject": "drm/sde: record deployed r6 display failure containment"
+    },
+    {
+      "phase": "r97",
+      "commit": "fd2e2b07eb30b33e030234531e0742d4457b107f",
+      "tree": "a43b229ebcdbb15bf24ace0eab8cdec308716f92",
+      "subject": "input/display: record deployed r97 failure diagnostics"
+    },
+    {
+      "phase": "r98",
+      "commit": "d1aa7fb98e8dbaafd23113d83e9a152e8e8f32cb",
+      "tree": "eeda9199f2127805e229f505d9d0e6b0db956930",
+      "subject": "ASoC: wait for real programmable mixer acknowledgements"
+    },
+    {
+      "phase": "r99",
+      "commit": "410ce6743e6192021e1dbc4dba14c17865eb65b8",
+      "tree": "1bcf8d6836600c44501d1c4a4f701f08d43d77f3",
+      "subject": "ASoC: target live mixer updates by session and COPP"
+    }
+  ],
+  "reviewed_code_files": {
+    "drivers/input/touchscreen/nt36532/nt36xxx_fw_update.c": {
+      "build_source_sha256": "a8b73fd7114238c51461882b957ace76f77df3f570b0c10247de03b01de6bad1",
+      "git_lf_sha256": "a8b73fd7114238c51461882b957ace76f77df3f570b0c10247de03b01de6bad1",
+      "raw_bytes_equal": true
+    },
+    "techpack/audio/asoc/msm-pcm-q6-v2.c": {
+      "build_source_sha256": "fc05218c40a2f1d64d41aaaf85ed0bcd6203c9c48d572a6162dd266429a1d1f2",
+      "git_lf_sha256": "fc05218c40a2f1d64d41aaaf85ed0bcd6203c9c48d572a6162dd266429a1d1f2",
+      "raw_bytes_equal": true
+    },
+    "techpack/audio/asoc/msm-pcm-routing-v2.c": {
+      "build_source_sha256": "133152cd76722f5250653c898d57e79d761c8da77b39b7e1a4de5b27430a504a",
+      "git_lf_sha256": "133152cd76722f5250653c898d57e79d761c8da77b39b7e1a4de5b27430a504a",
+      "raw_bytes_equal": true
+    },
+    "techpack/audio/dsp/q6adm.c": {
+      "build_source_sha256": "7f1067ef9831b65221b335433bd64ae48bb434940cf7e650f4cb9cc48a7422b6",
+      "git_lf_sha256": "7f1067ef9831b65221b335433bd64ae48bb434940cf7e650f4cb9cc48a7422b6",
+      "raw_bytes_equal": true
+    },
+    "techpack/audio/include/dsp/q6adm-v2.h": {
+      "build_source_sha256": "ba3837cb221a9ee3734af2fb95b544176d6eaf7ba25921648c26e3dc3574ad5f",
+      "git_lf_sha256": "ba3837cb221a9ee3734af2fb95b544176d6eaf7ba25921648c26e3dc3574ad5f",
+      "raw_bytes_equal": true
+    },
+    "techpack/display/msm/sde/sde_connector.c": {
+      "build_source_sha256": "74ad299865476e98cd5d8d4aeb3784624f8dacfc9e60bade8a45a6d0f7975e99",
+      "git_lf_sha256": "f52ab5ac98fb1f22a831f3ec07916bd8878ef24deb0f2562b0e2b0b807edb754",
+      "raw_bytes_equal": false
+    },
+    "techpack/display/msm/sde/sde_connector.h": {
+      "build_source_sha256": "e3f536331c937699867fad62a26b67fefb490496869aace3cdc75d2f8a5e53f4",
+      "git_lf_sha256": "be460961ca1ea0c6665759b2a292b63280c58260bc4901fdf78064a47c076181",
+      "raw_bytes_equal": false
+    },
+    "techpack/display/msm/sde/sde_encoder.c": {
+      "build_source_sha256": "79bc248a4a9a0e40675268314dc3a5e0ed19c43bbe7a685fbf0e4317cb643313",
+      "git_lf_sha256": "2a2ef978c4778de458fc5ac4cea41e473256d5618eaf03d6de07ce2eb228f463",
+      "raw_bytes_equal": false
+    }
+  },
+  "line_endings": "Git records canonical LF. Original r6 CRLF captures are text-equivalent; their raw SHA256 values are preserved separately. Build source C/H bytes are not changed by this import.",
+  "tracked_tree_comparison": {
+    "changed_code_files": 8,
+    "other_differences": [
+      "README-TB371FC.md",
+      "README.md",
+      "build/tb371fc/build.sh",
+      "build/tb371fc/test-firmware-cache.py",
+      "docs/tb371fc/wake-cache-r1/01-boot-firmware-cache.patch",
+      "docs/tb371fc/wake-cache-r1/02-wake-readonly-state.patch",
+      "docs/tb371fc/wake-cache-r1/README.md",
+      "docs/tb371fc/wake-cache-r1/boot-candidate-unpack.log",
+      "docs/tb371fc/wake-cache-r1/boot-original-unpack.log",
+      "docs/tb371fc/wake-cache-r1/boot-repack.log",
+      "docs/tb371fc/wake-cache-r1/build-input-verification.log",
+      "docs/tb371fc/wake-cache-r1/build-receipt.json",
+      "docs/tb371fc/wake-cache-r1/kernel-build.log",
+      "docs/tb371fc/wake-cache-r1/local-build.sh",
+      "docs/tb371fc/wake-cache-r1/local-pack.sh",
+      "docs/tb371fc/wake-cache-r1/source-manifest.json",
+      "docs/tb371fc/wake-cache-r1/test-results.txt",
+      "docs/tb371fc/wake-cache-r1/validation.json"
+    ],
+    "note": "Older build-tree documentation remains separate. Do not delete Git documentation to mimic the unpacked tree. Untracked/generated inputs were not part of this comparison."
+  },
+  "artifacts": {
+    "r99_Image_sha256": "02c917eb0ad4b3ec7c42e35854fb2064cf02663713aea18615f7960492cb1284",
+    "r99_boot_sha256": "69dc87ef2096cb68b5f87a33dc65531e950b33858d341e7060d40b369f43182a",
+    "r98_rollback_boot_sha256": "c1d3c3ae373adad9632b8807a6f5ea595390b5df648c5876da12f6984ce80dc7",
+    "note": "These are previously built and device-verified artifacts; importing Git history does not prove a bit-identical rebuild."
+  },
+  "build": {
+    "config": "build/tb371fc/kernel43.config",
+    "host": "r99-session-owner",
+    "version": 43,
+    "timestamp": "Sat Oct 31 2026 20:00:00 +0800",
+    "compiler": "Ubuntu clang 21.1.8",
+    "linker": "GNU binutils 2.42",
+    "jobs_used": 8,
+    "firmware_compat_include": "drivers/staging/fw-api/fw/p226_compat.h",
+    "builder_library_path": "/root/tc-shim/lib",
+    "existing_symbol_ABI": "unchanged; one new session mixer export",
+    "source_overlays_json": "Historical import ledger, not the current source hash manifest."
+  },
+  "verified": [
+    "r99 normal boot and boot partition SHA256",
+    "two concurrent silent streams: correct session2/COPP1, DSP ACK0 and ALSA0",
+    "eight source-extracted routing cases, full Image build, config and existing export ABI checks",
+    "ordinary stereo and QUAD AudioTrack both use 2ch kernel FE and 4ch TDM BE"
+  ],
+  "not_verified": [
+    "independent four-track acoustic output",
+    "real shared-COPP, capture/compress/loopback feature acceptance",
+    "real timeout injection, deep suspend or black-screen root cause resolution",
+    "MMAP/NOIRQ hardware path; vendor service rejected the request before fallback",
+    "pen, keyboard and phone end-to-end behavior without corresponding peripherals"
+  ],
+  "policy": "No additional wake loops. Optional panel-power recovery patch remains unapplied."
+}
