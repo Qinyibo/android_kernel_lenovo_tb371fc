@@ -644,26 +644,9 @@ int adm_programable_channel_mixer(int port_id, int copp_idx, int session_id,
 		pr_debug("%s: adm_params[%d] = 0x%x\n",
 			__func__, index, (unsigned int)ptr[index]);
 
-	atomic_set(&this_adm.copp.stat[port_idx][copp_idx], 0);
-	ret = apr_send_pkt(this_adm.apr, (uint32_t *)adm_params);
-	if (ret < 0) {
-		pr_err("%s: Set params failed port %d rc %d\n", __func__,
-			port_id, ret);
-		ret = -EINVAL;
-		goto fail_cmd;
-	}
-
-	ret = wait_event_timeout(this_adm.copp.wait[port_idx][copp_idx],
-			atomic_read(
-			&this_adm.copp.stat[port_idx][copp_idx]) >= 0,
-			msecs_to_jiffies(TIMEOUT_MS));
-	if (!ret) {
-		pr_err("%s: set params timed out port = %d\n",
-			__func__, port_id);
-		ret = -ETIMEDOUT;
-		goto fail_cmd;
-	}
-	ret = 0;
+	/* Serialize this COPP command and return the actual DSP acknowledgement. */
+	ret = adm_apr_send_pkt(adm_params, NULL, port_idx, copp_idx,
+			ADM_CMD_SET_PSPD_MTMX_STRTR_PARAMS_V5);
 fail_cmd:
 	kfree(adm_params);
 

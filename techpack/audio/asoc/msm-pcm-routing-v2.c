@@ -1829,7 +1829,6 @@ int msm_pcm_routing_set_channel_mixer_runtime(int be_id, int session_id,
 					0);
 	if (rc) {
 		pr_err("%s: send params failed rc=%d\n", __func__, rc);
-		rc = -EINVAL;
 	}
 	return rc;
 }
