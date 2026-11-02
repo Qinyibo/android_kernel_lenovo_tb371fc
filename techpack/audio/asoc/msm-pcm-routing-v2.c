@@ -1784,52 +1784,41 @@ int msm_pcm_routing_set_channel_mixer_runtime(int be_id, int session_id,
 			int session_type,
 			struct msm_pcm_channel_mixer *params)
 {
-	int rc = 0;
-	int port_id, copp_idx = 0;
+	int rc = -ENODEV;
+	int fe_id, copp_idx;
+	unsigned long copps;
 
 	be_id--;
-	if (be_id < 0 || be_id >= MSM_BACKEND_DAI_MAX) {
-		pr_err("%s: invalid backend id %d\n", __func__,
-				be_id);
+	if (be_id < 0 || be_id >= MSM_BACKEND_DAI_MAX ||
+	    (session_type != SESSION_TYPE_RX && session_type != SESSION_TYPE_TX))
 		return -EINVAL;
-	}
-
-	port_id = msm_bedais[be_id].port_id;
-	copp_idx = adm_get_default_copp_idx(port_id);
-	pr_debug("%s: port_id - %d, copp_idx %d session id - %d\n",
-		 __func__, port_id, copp_idx, session_id);
-
-	if ((params->input_channel < 0) ||
-		(params->input_channel > ADM_MAX_CHANNELS)) {
-		pr_err("%s: invalid input channel %d\n", __func__,
-				params->input_channel);
+	if (params->input_channel < 0 || params->input_channel > ADM_MAX_CHANNELS ||
+	    params->output_channel < 0 || params->output_channel > ADM_MAX_CHANNELS)
 		return -EINVAL;
-	}
-
-	if ((params->output_channel < 0) ||
-		(params->output_channel > ADM_MAX_CHANNELS)) {
-		pr_err("%s: invalid output channel %d\n", __func__,
-				params->output_channel);
-		return -EINVAL;
-	}
 
 	params->input_channels[0] = params->input_channel;
-
-	pr_debug("%s sess type %d,override in:%d out:%d,be active %d\n",
-			__func__, session_type,
-			params->override_in_ch_map,
-			params->override_out_ch_map,
-			msm_bedais[be_id].active);
-
-	rc = adm_programable_channel_mixer(port_id,
-					copp_idx,
-					session_id,
-					session_type,
-					params,
-					0);
-	if (rc) {
-		pr_err("%s: send params failed rc=%d\n", __func__, rc);
+	/* Route/start/close share this lock. Never fall back to a different
+	 * stream's default COPP when this session has no active route. */
+	mutex_lock(&routing_lock);
+	if (!msm_bedais[be_id].active)
+		goto out;
+	for (fe_id = 0; fe_id < MSM_FRONTEND_DAI_MM_SIZE; fe_id++) {
+		if (fe_dai_map[fe_id][session_type].strm_id != session_id ||
+		    !test_bit(fe_id, &msm_bedais[be_id].fe_sessions[0]))
+			continue;
+		copps = session_copp_map[fe_id][session_type][be_id];
+		for (copp_idx = 0; copp_idx < MAX_COPPS_PER_PORT; copp_idx++) {
+			if (!test_bit(copp_idx, &copps))
+				continue;
+			rc = adm_programable_channel_mixer_session(
+				msm_bedais[be_id].port_id, copp_idx,
+				session_id, session_type, params, 0);
+			if (rc)
+				goto out;
+		}
 	}
+out:
+	mutex_unlock(&routing_lock);
 	return rc;
 }
 EXPORT_SYMBOL(msm_pcm_routing_set_channel_mixer_runtime);
