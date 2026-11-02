@@ -991,6 +991,9 @@ int sde_connector_get_panel_vfp(struct drm_connector *connector,
  */
 int sde_connector_esd_status(struct drm_connector *connector);
 
+/* Report failed pre-enable without accessing unprepared encoder hardware. */
+void sde_connector_report_enable_failure(struct drm_connector *connector);
+
 /**
  * sde_connector_hbm_ctl - mi function to control hbm
  * @connector: Pointer to DRM connector object

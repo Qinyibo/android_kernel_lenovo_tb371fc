@@ -492,6 +492,21 @@ bool sde_encoder_is_dsc_merge(struct drm_encoder *drm_enc)
 	return false;
 }
 
+/* The bridge rolled back this modeset before scanout started. No hardware
+ * kickoff or watchdog-vsync switch is valid on that powered-down output. */
+static bool sde_encoder_dsi_enable_failed(struct drm_encoder *enc)
+{
+	struct sde_encoder_virt *sde_enc = to_sde_encoder_virt(enc);
+	struct dsi_bridge *bridge;
+
+	if (sde_enc->disp_info.intf_type != DRM_MODE_CONNECTOR_DSI ||
+	    !enc->bridge)
+		return false;
+	bridge = container_of(enc->bridge, struct dsi_bridge, base);
+	return !bridge->r94_pre_enable_ok && bridge->display &&
+		bridge->display->r94_touch_resume_cancelled;
+}
+
 bool sde_encoder_is_primary_display(struct drm_encoder *drm_enc)
 {
 	struct sde_encoder_virt *sde_enc = to_sde_encoder_virt(drm_enc);
@@ -3449,6 +3464,9 @@ static void sde_encoder_virt_enable(struct drm_encoder *drm_enc)
 		return;
 	}
 
+	if (sde_encoder_dsi_enable_failed(drm_enc))
+		return;
+
 	_sde_encoder_input_handler_register(drm_enc);
 
 	if ((drm_enc->crtc && drm_enc->crtc->state &&
@@ -4996,6 +5014,11 @@ int sde_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc,
 
 	_sde_encoder_helper_hdr_plus_mempool_update(sde_enc);
 
+	/* The failed frame is retired by kickoff below, after CRTC has accounted
+	 * for it. Do not attempt CTL/clock recovery on an unprepared panel. */
+	if (sde_encoder_dsi_enable_failed(drm_enc))
+		return 0;
+
 	/* prepare for next kickoff, may include waiting on previous kickoff */
 	SDE_ATRACE_BEGIN("sde_encoder_prepare_for_kickoff");
 	for (i = 0; i < sde_enc->num_phys_encs; i++) {
@@ -5135,6 +5158,27 @@ void sde_encoder_kickoff(struct drm_encoder *drm_enc, bool is_error)
 	sde_enc = to_sde_encoder_virt(drm_enc);
 
 	SDE_DEBUG_ENC(sde_enc, "\n");
+
+	if (sde_encoder_dsi_enable_failed(drm_enc)) {
+		struct dsi_bridge *failed_bridge = container_of(drm_enc->bridge,
+				struct dsi_bridge, base);
+		struct drm_connector *conn = failed_bridge->display->drm_conn;
+
+		/* No transfer was started, so buffers can be retired with ERROR.
+		 * Use one CRTC event for the virtual encoder, not one per DSI half.
+		 * Do not manufacture a successful frame or touch-ready state. */
+		sde_enc->crtc_frame_event_cb_data.connector = conn;
+		if (sde_enc->crtc_frame_event_cb)
+			sde_enc->crtc_frame_event_cb(
+				&sde_enc->crtc_frame_event_cb_data,
+				SDE_ENCODER_FRAME_EVENT_ERROR |
+				SDE_ENCODER_FRAME_EVENT_SIGNAL_RELEASE_FENCE |
+				SDE_ENCODER_FRAME_EVENT_SIGNAL_RETIRE_FENCE);
+		sde_connector_report_enable_failure(conn);
+		SDE_ERROR_ENC(sde_enc, "R96_ENABLE_FAILED frame_retired_error\n");
+		SDE_ATRACE_END("encoder_kickoff");
+		return;
+	}
 
 	/* create a 'no pipes' commit to release buffers on errors */
 	if (is_error)

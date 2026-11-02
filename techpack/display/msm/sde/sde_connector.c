@@ -2576,14 +2576,15 @@ static int sde_connector_atomic_check(struct drm_connector *connector,
 	return 0;
 }
 
-static void _sde_connector_report_panel_dead(struct sde_connector *conn,
-	bool skip_pre_kickoff)
+static bool _sde_connector_notify_panel_dead(struct sde_connector *conn)
 {
 	struct drm_event event;
-	struct dsi_display *display = (struct dsi_display *)(conn->display);
+	struct dsi_display *display;
 
-	if (!conn)
-		return;
+	if (!conn || !conn->display)
+		return false;
+
+	display = conn->display;
 
 	/* Panel dead notification can come:
 	 * 1) ESD thread
@@ -2591,7 +2592,7 @@ static void _sde_connector_report_panel_dead(struct sde_connector *conn,
 	 * So such case, avoid failure notification twice.
 	 */
 	if (conn->panel_dead)
-		return;
+		return false;
 
 	conn->panel_dead = true;
 	display->panel->mi_cfg.panel_dead_flag = true;
@@ -2599,11 +2600,26 @@ static void _sde_connector_report_panel_dead(struct sde_connector *conn,
 	event.length = sizeof(bool);
 	msm_mode_object_event_notify(&conn->base.base,
 		conn->base.dev, &event, (u8 *)&conn->panel_dead);
-	sde_encoder_display_failure_notification(conn->encoder,
-		skip_pre_kickoff);
 	SDE_EVT32(SDE_EVTLOG_ERROR);
 	SDE_ERROR("esd check failed report PANEL_DEAD conn_id: %d enc_id: %d\n",
 			conn->base.base.id, conn->encoder->base.id);
+	return true;
+}
+
+static void _sde_connector_report_panel_dead(struct sde_connector *conn,
+	bool skip_pre_kickoff)
+{
+	if (_sde_connector_notify_panel_dead(conn))
+		sde_encoder_display_failure_notification(conn->encoder,
+			skip_pre_kickoff);
+}
+
+/* A pre-enable rollback has no active encoder hardware to recover. Notify
+ * the existing userspace panel-recovery path without touching dead clocks. */
+void sde_connector_report_enable_failure(struct drm_connector *connector)
+{
+	if (connector)
+		_sde_connector_notify_panel_dead(to_sde_connector(connector));
 }
 
 int sde_connector_esd_status(struct drm_connector *conn)
