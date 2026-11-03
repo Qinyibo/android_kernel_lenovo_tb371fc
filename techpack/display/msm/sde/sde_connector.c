@@ -1304,6 +1304,17 @@ void sde_connector_helper_bridge_disable(struct drm_connector *connector)
 	c_conn->allow_bl_update = false;
 }
 
+/* Snapshot the fault this modeset can recover, before touching panel power. */
+void sde_connector_helper_bridge_pre_enable(struct drm_connector *connector)
+{
+	struct sde_connector *conn = to_sde_connector(connector);
+	struct dsi_display *display = conn->display;
+
+	dsi_panel_acquire_panel_lock(display->panel);
+	conn->panel_recovery_seq = conn->panel_dead_seq;
+	dsi_panel_release_panel_lock(display->panel);
+}
+
 void sde_connector_helper_bridge_enable(struct drm_connector *connector)
 {
 	struct sde_connector *c_conn = NULL;
@@ -1342,7 +1353,13 @@ void sde_connector_helper_bridge_enable(struct drm_connector *connector)
 			}
 		}
 	}
-	c_conn->panel_dead = false;
+	/* A newer fault still owns dead; do not consume it here. */
+	dsi_panel_acquire_panel_lock(display->panel);
+	if (c_conn->panel_recovery_seq == c_conn->panel_dead_seq) {
+		display->panel->mi_cfg.panel_dead_flag = false;
+		c_conn->panel_dead = false;
+	}
+	dsi_panel_release_panel_lock(display->panel);
 }
 
 int sde_connector_clk_ctrl(struct drm_connector *connector, bool enable)
@@ -2576,10 +2593,12 @@ static int sde_connector_atomic_check(struct drm_connector *connector,
 	return 0;
 }
 
-static bool _sde_connector_notify_panel_dead(struct sde_connector *conn)
+static bool _sde_connector_notify_panel_dead(struct sde_connector *conn,
+		bool request_power_recovery)
 {
 	struct drm_event event;
 	struct dsi_display *display;
+	bool panel_dead = true;
 
 	if (!conn || !conn->display)
 		return false;
@@ -2591,15 +2610,22 @@ static bool _sde_connector_notify_panel_dead(struct sde_connector *conn)
 	 * 2) Commit thread (if TE stops coming)
 	 * So such case, avoid failure notification twice.
 	 */
-	if (conn->panel_dead)
+	dsi_panel_acquire_panel_lock(display->panel);
+	/* Count duplicates too, so an older success cannot consume them. */
+	conn->panel_dead_seq++;
+	if (conn->panel_dead) {
+		dsi_panel_release_panel_lock(display->panel);
 		return false;
+	}
 
 	conn->panel_dead = true;
-	display->panel->mi_cfg.panel_dead_flag = true;
+	if (request_power_recovery)
+		display->panel->mi_cfg.panel_dead_flag = true;
+	dsi_panel_release_panel_lock(display->panel);
 	event.type = DRM_EVENT_PANEL_DEAD;
 	event.length = sizeof(bool);
 	msm_mode_object_event_notify(&conn->base.base,
-		conn->base.dev, &event, (u8 *)&conn->panel_dead);
+		conn->base.dev, &event, (u8 *)&panel_dead);
 	SDE_EVT32(SDE_EVTLOG_ERROR);
 	SDE_ERROR("esd check failed report PANEL_DEAD conn_id: %d enc_id: %d\n",
 			conn->base.base.id, conn->encoder->base.id);
@@ -2609,7 +2635,7 @@ static bool _sde_connector_notify_panel_dead(struct sde_connector *conn)
 static void _sde_connector_report_panel_dead(struct sde_connector *conn,
 	bool skip_pre_kickoff)
 {
-	if (_sde_connector_notify_panel_dead(conn))
+	if (_sde_connector_notify_panel_dead(conn, true))
 		sde_encoder_display_failure_notification(conn->encoder,
 			skip_pre_kickoff);
 }
@@ -2623,13 +2649,10 @@ void sde_connector_report_enable_failure(struct drm_connector *connector)
 	if (!connector)
 		return;
 	c_conn = to_sde_connector(connector);
-	/* DIAGNOSTIC: sticky panel_dead suppresses renotify (rate-limited). */
-	if (c_conn->panel_dead) {
+	if (!_sde_connector_notify_panel_dead(c_conn, true) &&
+			READ_ONCE(c_conn->panel_dead))
 		pr_err_once("R97_DIAG PANEL_DEAD_STICKY skip_renotify conn_id=%d\n",
 				connector->base.id);
-		return;
-	}
-	_sde_connector_notify_panel_dead(c_conn);
 }
 
 int sde_connector_esd_status(struct drm_connector *conn)
@@ -2719,7 +2742,6 @@ static irqreturn_t esd_err_irq_handle(int irq, void *data)
 {
 	struct sde_connector *c_conn = data;
 	struct dsi_display *display = c_conn->display;
-	struct drm_event event;
 	int power_mode;
 
 	if (!display || !display->panel) {
@@ -2745,6 +2767,7 @@ static irqreturn_t esd_err_irq_handle(int irq, void *data)
 		}
 
 		if (atomic_read(&(display->panel->esd_recovery_pending))) {
+			c_conn->panel_dead_seq++;
 			DSI_INFO("%s display ESD recovery already pending\n",
 					display->display_type);
 			dsi_panel_release_panel_lock(display->panel);
@@ -2754,6 +2777,7 @@ static irqreturn_t esd_err_irq_handle(int irq, void *data)
 		if (!c_conn->panel_dead) {
 			atomic_set(&display->panel->esd_recovery_pending, 1);
 		} else {
+			c_conn->panel_dead_seq++;
 			DSI_INFO("%s display already notify PANEL_DEAD\n",
 					display->display_type);
 			dsi_panel_release_panel_lock(display->panel);
@@ -2768,16 +2792,8 @@ static irqreturn_t esd_err_irq_handle(int irq, void *data)
 			power_mode == SDE_MODE_DPMS_LP1) {
 			_sde_connector_report_panel_dead(c_conn, false);
 		} else {
-			c_conn->panel_dead = true;
-			event.type = DRM_EVENT_PANEL_DEAD;
-			event.length = sizeof(bool);
-			msm_mode_object_event_notify(&c_conn->base.base,
-				c_conn->base.dev, &event, (u8 *)&c_conn->panel_dead);
-			SDE_EVT32(SDE_EVTLOG_ERROR);
-			SDE_ERROR("%s display esd irq check failed report"
-				" PANEL_DEAD conn_id: %d enc_id: %d\n",
-				display->display_type,
-				c_conn->base.base.id, c_conn->encoder->base.id);
+			/* Keep OFF/LP policy: notify without rail recovery. */
+			_sde_connector_notify_panel_dead(c_conn, false);
 		}
 	}
 

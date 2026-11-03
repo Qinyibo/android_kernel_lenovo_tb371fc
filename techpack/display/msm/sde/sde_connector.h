@@ -487,6 +487,9 @@ struct sde_connector {
 	struct sde_clone_cdev *cdev_clone;
 	struct delayed_work status_work;
 	u32 esd_status_interval;
+	/* Fault and recovery snapshots are protected by the DSI panel_lock. */
+	u32 panel_dead_seq;
+	u32 panel_recovery_seq;
 	bool panel_dead;
 	bool esd_status_check;
 
@@ -993,6 +996,8 @@ int sde_connector_esd_status(struct drm_connector *connector);
 
 /* Report failed pre-enable without accessing unprepared encoder hardware. */
 void sde_connector_report_enable_failure(struct drm_connector *connector);
+
+void sde_connector_helper_bridge_pre_enable(struct drm_connector *connector);
 
 /**
  * sde_connector_hbm_ctl - mi function to control hbm

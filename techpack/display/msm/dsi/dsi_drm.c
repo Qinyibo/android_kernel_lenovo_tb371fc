@@ -194,6 +194,7 @@ static void dsi_bridge_pre_enable(struct drm_bridge *bridge)
 	}
 
 	c_bridge->r94_pre_enable_ok = false;
+	sde_connector_helper_bridge_pre_enable(c_bridge->display->drm_conn);
 
 	if (bridge->encoder->crtc->state->active_changed)
 		atomic_set(&c_bridge->display->panel->esd_recovery_pending, 0);

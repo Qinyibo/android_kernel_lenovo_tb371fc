@@ -484,9 +484,6 @@ static int dsi_panel_power_on(struct dsi_panel *panel)
 							panel->reset_config.tp_reset_gpio);
 				}
 			}
-			if (panel->mi_cfg.panel_dead_flag) {
-				panel->mi_cfg.panel_dead_flag = false;
-			}
 		}
 	} else {
 		rc = dsi_pwr_enable_regulator(&panel->power_info, true);

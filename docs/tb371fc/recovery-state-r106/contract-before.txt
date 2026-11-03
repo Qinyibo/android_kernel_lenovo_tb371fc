@@ -1,0 +1,14 @@
+FAIL power_on must not consume recovery eligibility
+FAIL failed PREPARE rollback powers down
+FAIL failure retains both dead flags
+FAIL next recovery can power_on again
+FAIL early failure keeps recovery armed
+FAIL early failure keeps recovery armed
+FAIL early failure keeps recovery armed
+FAIL post_enable failure rollback still powers down
+FAIL late fault is not cleared by old success
+FAIL notification carries stable true payload
+FAIL concurrent ESD before completion retained
+FAIL sticky ESD IRQ is counted before early return
+FAIL pending ESD IRQ is counted before early return
+29 checks; 13 failures
