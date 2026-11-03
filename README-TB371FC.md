@@ -1,6 +1,14 @@
-# Current candidate: wake-cache-r1 (2026-10-31)
+# Current device candidate: r107 (2026-11-03)
 
-Main now carries the three touchscreen inputs actually compiled into the flashed wake-cache-r1 Image. The historical #43 baseline is commit 9bed5276d6526438208cd488b71292a725b68d4d; the hashes below describe that historical baseline, not the new candidate.
+The installed functional source is `41082098de91855a809239bf64f339a16d39effe` on `recovery-state-r107`. It completes panel recovery after native touch readiness and propagates late failures, including ON-to-ON modesets. 70 software checks, full Image, boot readback and one normal boot/input-state check pass. **Intermittent INIT=0x9D and post-recovery REK=A0 root causes remain unresolved; hardware_success_claimed=false.**
+
+See [r107 validation](docs/tb371fc/late-readiness-r107/README.md) and [Grok handoff / power ownership](docs/tb371fc/late-readiness-r107/grok-handoff.md). This branch contains the installed candidate; `main` remains the prior r104 baseline. The v27 full ROM archive still contains r106 and was not rebuilt here. No new wake stress or supply switching was performed for the handoff.
+
+---
+
+# Historical candidate: wake-cache-r1 (2026-10-31)
+
+At that stage the branch carried the three touchscreen inputs actually compiled into the flashed wake-cache-r1 Image. The historical #43 baseline is commit 9bed5276d6526438208cd488b71292a725b68d4d; the hashes below describe that historical baseline, not the new candidate.
 
 See [candidate source, observations and validation](docs/tb371fc/wake-cache-r1/README.md). Physical double-tap still fails. A user-reported long idle was followed by a normal power-button wake, which is encouraging but does not confirm the original black-screen root cause.
 

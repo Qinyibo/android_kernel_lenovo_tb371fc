@@ -1,0 +1,51 @@
+[11054.445283] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=11, buf[1]=0x9D, 0x00, 0x00, 0x32, 0x20
+[11054.445289] [NVT-ts] nvt_download_firmware_hw_crc 803: nvt_check_fw_reset_state failed. (-1)
+[11054.724464] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=11, buf[1]=0x9D, 0x00, 0x00, 0x32, 0x20
+[11054.724473] [NVT-ts] nvt_download_firmware_hw_crc 803: nvt_check_fw_reset_state failed. (-1)
+[11055.003964] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=11, buf[1]=0x9D, 0x00, 0x00, 0x32, 0x20
+[11055.003972] [NVT-ts] nvt_download_firmware_hw_crc 803: nvt_check_fw_reset_state failed. (-1)
+[11055.004249] [NVT-ts] nvt_read_bld_hw_crc 679: crc_done = 1, ilm_crc_flag = 0, dlm_crc_flag = 0
+[11055.004604] [NVT-ts] nvt_read_bld_hw_crc 701: ilm: bin crc = 0xA6D29104, golden = 0xA6D29104, result = 0xA6D29104
+[11055.004957] [NVT-ts] nvt_read_bld_hw_crc 723: dlm: bin crc = 0xF3DDBA01, golden = 0x9D324E2A, result = 0x9D324E2A
+[11055.005137] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG dma_crc_flag=0x12 addr=0x1FB534 mask=0xFF
+[11055.005360] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG crc_err_flag=0x00 addr=0x1FB535 mask=0xFF
+[11055.005547] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG boot_rdy=0x01 addr=0x1FB50D mask=0xFF
+[11055.005743] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG enb_casc_raw=0x02 addr=0x1FB12C mask=0x01
+[11055.005934] [NVT-ts] nvt_read_bld_hw_crc 743: R97_DIAG reset_state=0x9D 0x00 0x00 0x32 0x20
+[11055.005947] [NVT-ts] nvt_resume_fw_restore 3937: R94_FW_HW_RESET_RETRY previous=-1
+[11055.297763] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=11, buf[1]=0x9D, 0x00, 0x00, 0x32, 0x20
+[11055.297772] [NVT-ts] nvt_download_firmware_hw_crc 803: nvt_check_fw_reset_state failed. (-1)
+[11055.577225] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=11, buf[1]=0x9D, 0x00, 0x00, 0x32, 0x20
+[11055.577232] [NVT-ts] nvt_download_firmware_hw_crc 803: nvt_check_fw_reset_state failed. (-1)
+[11055.856038] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=11, buf[1]=0x9D, 0x00, 0x00, 0x32, 0x20
+[11055.856046] [NVT-ts] nvt_download_firmware_hw_crc 803: nvt_check_fw_reset_state failed. (-1)
+[11055.856240] [NVT-ts] nvt_read_bld_hw_crc 679: crc_done = 1, ilm_crc_flag = 0, dlm_crc_flag = 0
+[11055.856534] [NVT-ts] nvt_read_bld_hw_crc 701: ilm: bin crc = 0xA6D29104, golden = 0xA6D29104, result = 0xA6D29104
+[11055.856829] [NVT-ts] nvt_read_bld_hw_crc 723: dlm: bin crc = 0xF3DDBA01, golden = 0x9D324E2A, result = 0x9D324E2A
+[11055.856999] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG dma_crc_flag=0x12 addr=0x1FB534 mask=0xFF
+[11055.857165] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG crc_err_flag=0x00 addr=0x1FB535 mask=0xFF
+[11055.857314] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG boot_rdy=0x01 addr=0x1FB50D mask=0xFF
+[11055.857461] [NVT-ts] nvt_diag_boot_reg 657: R97_DIAG enb_casc_raw=0x02 addr=0x1FB12C mask=0x01
+[11055.857614] [NVT-ts] nvt_read_bld_hw_crc 743: R97_DIAG reset_state=0x9D 0x00 0x00 0x32 0x20
+[11055.857622] [NVT-ts] nvt_resume_fw_restore 3944: R94_FW_HW_RESET_RESULT ret=-1
+[11055.857625] [NVT-ts] nvt_resume_fw_restore 3960: R94_PREPARE_FAILED -1 IRQ_CLOSED
+[11055.857629] [NVT-ts] nvt_panel_resume_prepare 4012: R94_PREPANEL_FW_FAILED -1 IRQ_CLOSED
+[11055.857658] [drm:dsi_bridge_pre_enable] *ERROR* [msm-dsi-error]: [0] DSI display enable failed, rc=-1
+[11055.858129] [drm:_sde_connector_notify_panel_dead:2631] [sde error]esd check failed report PANEL_DEAD conn_id: 29 enc_id: 28
+[11055.858134] [drm:sde_encoder_kickoff:5178] [sde error]enc28 R96_ENABLE_FAILED frame_retired_error
+[11055.858145] [drm:dsi_bridge_enable] *ERROR* [msm-dsi-error]: R94_BRIDGE_BLOCKED prior pre-enable failure
+[11055.860895] [drm:sde_connector_report_enable_failure:2655] R97_DIAG PANEL_DEAD_STICKY skip_renotify conn_id=29
+[11055.860900] [drm:sde_encoder_kickoff:5178] [sde error]enc28 R96_ENABLE_FAILED frame_retired_error
+[11055.868145] dsi_pll_7nm_lock_status: DSI PLL(0) lock failed, status=0x00000000
+[11055.868150] dsi_pll_enable: PLL(0) lock failed
+[11055.868246] [drm:dsi_bridge_post_disable] *ERROR* [msm-dsi-error]: [0] DSI display disable failed, rc=-22
+[11055.868405] [drm:dsi_panel_post_unprepare] [msm-dsi-info]: R104_PANEL_DEAD_POWER_OFF allowing existing rail recovery
+[11055.870859] [drm:dsi_panel_pre_prepare] [msm-dsi-info]: R104_PANEL_DEAD_POWER_ON allowing existing rail recovery
+[11056.004592] [NVT-ts] nvt_resume_fw_restore 3928: R94_SLEEP_WDT_RECOVERY_OWNED idle=0 prev_failed=1
+[11056.191674] [NVT-ts] nvt_update_firmware 931: Update firmware success! <187063 us>
+[11056.191898] [NVT-ts] nvt_resume_fw_restore 3957: R94_PREPARED full_fw_verified IRQ_CLOSED
+[11056.191900] [NVT-ts] nvt_panel_resume_prepare 4015: R94_PREPANEL_FW_VERIFIED before_DSI_commands IRQ_CLOSED
+[11056.808107] [drm:dsi_display_enable] [msm-dsi-info]: R94_DISPLAY_PREPARED waiting_real_first_frame id=15
+[11056.816127] [drm:dsi_display_post_enable] [msm-dsi-info]: R94_PANEL_POST_ARMED waiting_native_commit_completion
+[11057.323691] [NVT-ts] nvt_check_fw_reset_state 972: error, retry=51, buf[1]=0xA0, 0xD1, 0x00, 0x32, 0x20
+[11057.323694] [NVT-ts] nvt_panel_resume_commit 4057: R94_NATIVE_COMPLETE_REK_FAILED -1 IRQ_CLOSED_DISPLAY_RETAINED
