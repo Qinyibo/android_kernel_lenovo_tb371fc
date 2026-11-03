@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-03",
+  "source_base": "ad9987077d8eb726a1be70801a2b7aa12e886b54",
+  "deployed_source_commit": "455927db6665e2b3696aa8a96bc97fb09c20bd3a",
+  "publication_code_delta": false,
+  "image_sha256": "cd216f2cd47c38bd7a86499f87c8a1eca065f428cf4997d62454d13a24812e50",
+  "boot_sha256": "f29c32c15c7276d777f243a322ca35495099c25d6e41e402dd4eacb77121f85b",
+  "config": "build/tb371fc/kernel43.config",
+  "build_host_override": "r104-panel-recovery",
+  "full_image_build_pass": true,
+  "module_symvers_unchanged": true,
+  "normal_boot_readback_pass": true,
+  "usb_fixed_claimed": false,
+  "full_fastboot_flash_pass": false,
+  "black_screen_root_cause_fixed_claimed": false,
+  "r105_usb_candidate_included": false,
+  "unvalidated_r100_hid_candidate_included": false
+}
