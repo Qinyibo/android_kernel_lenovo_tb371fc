@@ -44,6 +44,8 @@ clang -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter -Wno-misl
 
 ## 实机边界与回退
 
-当前构建/安装状态以同目录 validation.json 为准。后续只做一次正常安装与启动核对，不故障注入、不反复唤醒。异常恢复和 INIT=0x9D 仍需自然故障现场验证。
+已刷入 r106，boot 分区完整回读和正常启动通过；当前启动的原生服务 READY/rc0、Enforcing、动画等级 4、触控 failed=0 检查通过。没有故障注入或反复唤醒，异常恢复和 INIT=0x9D 仍需自然故障现场验证。
+
+用户改用主板后置 USB 后，双向 16 MiB 随机传输及 bootloader fastboot 刷入同版 96 MiB boot 均通过，分区回读和重启正常。停止 USB 内核修补，后续固定使用该后置口；完整 ROM 脚本未重测。见 [USB 复测证据](../usb-retest-20261103.json)。
 
 回退到 r104 boot SHA256 `f29c32c15c7276d777f243a322ca35495099c25d6e41e402dd4eacb77121f85b`。不改变 ROM/data，也不使用失败的 fastboot RAM 下载载荷。

@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-03",
+  "timezone": "Asia/Hong_Kong",
+  "kernel_source_commit": "4b397325943e70d3dbaaff63b5f622ab48668d62",
+  "source_code_changed_in_this_retest": false,
+  "user_confirmed_connection": "rear motherboard USB port",
+  "host_topology": {
+    "previous_usb_port": 4,
+    "current_usb_port": 5,
+    "same_host_controller": true
+  },
+  "payload": {
+    "bytes": 16777216,
+    "sha256": "1a2526373f5bef44c1910547de4ae81db4319b70631d860f162df8a92f2eef1d",
+    "compression_disabled": true
+  },
+  "usb_pull": {
+    "returncode": 0,
+    "seconds": 0.531,
+    "bytes": 16777216,
+    "hash_match": true,
+    "pass": true
+  },
+  "usb_push": {
+    "returncode": 0,
+    "seconds": 0.953,
+    "hash_match": true,
+    "pass": true
+  },
+  "fastboot": {
+    "bootloader_userspace": false,
+    "image_bytes": 100663296,
+    "image_sha256": "899860494f70ec1b63241a9ebbd25946502bdb7e932558bc114632f908ae0920",
+    "sending_seconds": 2.491,
+    "writing_seconds": 0.378,
+    "total_seconds": 2.906,
+    "flash_pass": true,
+    "partition_readback_pass": true,
+    "normal_boot_pass": true,
+    "full_rom_script_tested": false,
+    "data_wiped": false
+  },
+  "verification": {
+    "enforcing": true,
+    "native_ready_current_boot": true,
+    "native_exit_rc": 0,
+    "animation_level": 4,
+    "touch_failed": false
+  },
+  "conclusion": "Rear port works in these tests; user accepts this connection and stops USB kernel patching.",
+  "previous_connection_fault_component_proven": false,
+  "usb_kernel_fix_claimed": false,
+  "long_term_usb_stability_claimed": false,
+  "black_screen_root_cause_fixed_claimed": false,
+  "exceptional_display_recovery_exercised": false
+}

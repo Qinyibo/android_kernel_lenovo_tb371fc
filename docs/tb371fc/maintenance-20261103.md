@@ -1,5 +1,27 @@
 # TB371FC r104 maintenance baseline — 2026-11-03
 
+## Later update: r106 installed; rear USB port passes
+
+The r106 candidate source is 4b397325943e70d3dbaaff63b5f622ab48668d62,
+on recovery-state-r106; main remains the r104 source baseline. Its normal boot
+and partition readback passed. It preserves failed recovery eligibility without
+changing firmware/reset/CRC or USB. INIT=0x9D is not root-cause fixed and no
+exceptional hardware recovery was exercised. See recovery-state-r106/README.md.
+
+After moving from the prior connection to a rear motherboard USB port, the
+same incompressible 16 MiB payload passed USB pull and push with matching SHA256.
+Bootloader fastboot downloaded the current 96 MiB r106 boot in 2.491 seconds and
+wrote it in 0.378 seconds, without error 121. Full boot readback and normal boot
+passed, with user data preserved. The user accepts the rear-port path; stop USB
+kernel patching. The controller stayed the same; only port 4 -> 5 changed in
+Windows topology. This points to the former connection path without proving
+which component failed. Full-ROM fastboot scripts were not rerun, and no
+lifetime USB stability claim is made. Evidence: usb-retest-20261103.json.
+
+The sections below describe the earlier r104 publication, not the latest USB
+status. The original v26/r104 archive has not been replaced with an r106 archive.
+
+
 This source publication preserves the deployed commit chain from
 ad9987077d8eb726a1be70801a2b7aa12e886b54 through
 455927db6665e2b3696aa8a96bc97fb09c20bd3a. The publication commit adds
