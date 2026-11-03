@@ -463,9 +463,13 @@ static int dsi_panel_power_on(struct dsi_panel *panel)
 {
 	int rc = 0;
 
-	if (p108_keep_panel_power) {
+	/* Preserve gesture rails normally; allow the existing dead-panel recovery. */
+	if (p108_keep_panel_power && !panel->mi_cfg.panel_dead_flag) {
 		return 0;
 	}
+
+	if (p108_keep_panel_power && panel->mi_cfg.panel_dead_flag)
+		DSI_INFO("R104_PANEL_DEAD_POWER_ON allowing existing rail recovery\n");
 
 	if (panel->mi_cfg.is_tddi_flag) {
 		if (!panel->mi_cfg.tddi_doubleclick_flag || panel->mi_cfg.panel_dead_flag) {
@@ -531,9 +535,12 @@ static int dsi_panel_power_off(struct dsi_panel *panel)
 {
 	int rc = 0;
 
-	if (p108_keep_panel_power) {
+	if (p108_keep_panel_power && !panel->mi_cfg.panel_dead_flag) {
 		return 0;
 	}
+
+	if (p108_keep_panel_power && panel->mi_cfg.panel_dead_flag)
+		DSI_INFO("R104_PANEL_DEAD_POWER_OFF allowing existing rail recovery\n");
 
 	if (gpio_is_valid(panel->reset_config.disp_en_gpio))
 		gpio_set_value(panel->reset_config.disp_en_gpio, 0);
