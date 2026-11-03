@@ -49,3 +49,10 @@ clang -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter -Wno-misl
 用户改用主板后置 USB 后，双向 16 MiB 随机传输及 bootloader fastboot 刷入同版 96 MiB boot 均通过，分区回读和重启正常。停止 USB 内核修补，后续固定使用该后置口；完整 ROM 脚本未重测。见 [USB 复测证据](../usb-retest-20261103.json)。
 
 回退到 r104 boot SHA256 `f29c32c15c7276d777f243a322ca35495099c25d6e41e402dd4eacb77121f85b`。不改变 ROM/data，也不使用失败的 fastboot RAM 下载载荷。
+
+
+## v27 完整候选包（2026-11-03）
+
+已将当前 r106 boot 与原 v26 系统组合为 `ColorOS16_TB371FC_v27_r106_20261103_CANDIDATE.zip`。SHA256 `4bc62eae670edc6d832b02d36f86739120c5f466bb5f95c4a210909be838faa8`，176 个成员逐项 SHA/CRC 核验通过；仅 boot 镜像变化，原 v26 包保留。镜像保存在本地，Git 只同步源码、配方和记录。见 [精确发布记录](../v27-release-20261103.json)及 [ROM 打包入口](https://github.com/Qinyibo/TB371FC-ColorOS16/tree/main/rom-build/release-v27)。本次没有新的内核产品代码改动；完整 ROM 实刷仍未验收。
+
+打包期间另有普通触摸与回桌面暂时失效反馈，多指缩小窗仍有效，随后恢复。现场记录不能证明触控硬件全失灵，也未确定窗口或手势拦截根因；该事项与 INIT=0x9D 黑屏均保留为未解决问题。采集没有重启或刷写；用户游戏期间停止设备操作。

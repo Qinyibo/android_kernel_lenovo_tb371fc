@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-03",
+  "candidate": "v27-r106",
+  "archive": {
+    "filename": "ColorOS16_TB371FC_v27_r106_20261103_CANDIDATE.zip",
+    "bytes": 7484814351,
+    "sha256": "4bc62eae670edc6d832b02d36f86739120c5f466bb5f95c4a210909be838faa8",
+    "members": 176
+  },
+  "kernel": {
+    "build": "#43 r106-recovery-state",
+    "image_sha256": "9cfdff7224e9239bac85fbd96a9a2c3ed197e633bcf5b922be09584c2b50bb07",
+    "source_commit": "4b397325943e70d3dbaaff63b5f622ab48668d62",
+    "source_record_commit": "5920918c017ded5440f2a974956b21cf02cdb0f2",
+    "source_branch": "recovery-state-r106",
+    "speaker_native_api": 19,
+    "normal_boot_verified": true,
+    "partition_readback_verified": true,
+    "physical_pixels_confirmed": false,
+    "exceptional_recovery_exercised": false,
+    "init_0x9d_root_cause_fixed": false
+  },
+  "images": [
+    {
+      "name": "super",
+      "path": "images/super-R94.img",
+      "bytes": 12884901888,
+      "sha256": "fc7e2ea3cd7783ef41eb5dce90290c6af03eac2ebb18cbd5c08e46168b355405"
+    },
+    {
+      "name": "boot",
+      "path": "images/boot_a.img",
+      "bytes": 100663296,
+      "sha256": "899860494f70ec1b63241a9ebbd25946502bdb7e932558bc114632f908ae0920"
+    },
+    {
+      "name": "vbmeta",
+      "path": "images/vbmeta_a.img",
+      "bytes": 65536,
+      "sha256": "5faf802f3d821512505c42a9fa0dba5b969f135fd5ec3bf6686e8448e741a169"
+    },
+    {
+      "name": "vbmeta_system",
+      "path": "images/vbmeta_system_a.img",
+      "bytes": 65536,
+      "sha256": "848f04a7cf01cbfc68640ece4895e1aa00c6ba5cbf385c81b395f51da0829fef"
+    }
+  ],
+  "original_seven_flash_scripts_unchanged": true,
+  "only_partition_changed_from_v26": "boot_a",
+  "original_offline_entry_pass": true,
+  "final_all_member_sha_and_crc_pass": true,
+  "exact_archive_clean_first_boot_tested": false,
+  "full_rom_fastboot_flash_tested": false,
+  "packaging_modified_device": false,
+  "known_issues": {
+    "date": "2026-11-03",
+    "candidate": "v27-r106",
+    "black_screen": {
+      "init_0x9d_root_cause_fixed": false,
+      "r106_software_recovery_state_fix_included": true,
+      "exceptional_hardware_recovery_exercised": false
+    },
+    "transient_normal_touch_and_home_interaction": {
+      "user_reported": true,
+      "user_reported_multi_finger_mini_window_gesture_still_worked": true,
+      "user_reported_recovered": true,
+      "agent_reboot_or_systemui_restart_performed": false,
+      "snapshot_dispatch_enabled": true,
+      "snapshot_dispatch_frozen": false,
+      "snapshot_touch_driver_awake": true,
+      "snapshot_touch_driver_failed": false,
+      "later_evdev_events_and_irq_increment_observed": true,
+      "entire_failure_interval_captured": false,
+      "root_cause_proven": false,
+      "complete_touch_hardware_failure_proven": false,
+      "input_dispatch_or_gesture_interception_is_only_a_lead": true
+    },
+    "usb": {
+      "rear_motherboard_port_accepted": true,
+      "bidirectional_16mib_and_96mib_boot_fastboot_pass": true,
+      "full_rom_script_retested": false,
+      "usb_kernel_patch_added": false
+    },
+    "exact_archive_clean_first_boot_tested": false
+  },
+  "base_archive_sha256": "93de4dc2e1f7ecfba1fedb763a0d4e71d9ea4c4b18e053fd5103dc9e235ec100",
+  "old_archive_preserved": true,
+  "rollback_boot_sha256": "f29c32c15c7276d777f243a322ca35495099c25d6e41e402dd4eacb77121f85b"
+}
