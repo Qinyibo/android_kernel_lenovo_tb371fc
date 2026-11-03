@@ -1353,6 +1353,39 @@ void sde_connector_helper_bridge_enable(struct drm_connector *connector)
 			}
 		}
 	}
+}
+
+/*
+ * The native completion notifier owns touch REK. Bridge post-enable only
+ * arms that check, so it cannot consume recovery eligibility on its own.
+ */
+void sde_connector_complete_panel_recovery(struct drm_connector *connector,
+		int notify_error)
+{
+	struct sde_connector *c_conn;
+	struct dsi_display *display;
+
+	if (!connector)
+		return;
+	c_conn = to_sde_connector(connector);
+	if (c_conn->connector_type != DRM_MODE_CONNECTOR_DSI)
+		return;
+	display = c_conn->display;
+
+	if (notify_error) {
+		SDE_ERROR("R107_NATIVE_UNBLANK_FAILED rc=%d conn_id=%d\n",
+				notify_error, connector->base.id);
+		/*
+		 * Reuse sticky notification coalescing: a failed recovery must
+		 * not clear dead and start another automatic recovery cycle.
+		 */
+		sde_connector_report_enable_failure(connector);
+		return;
+	}
+	if (!display || !display->bridge ||
+			!display->bridge->r94_pre_enable_ok)
+		return;
+
 	/* A newer fault still owns dead; do not consume it here. */
 	dsi_panel_acquire_panel_lock(display->panel);
 	if (c_conn->panel_recovery_seq == c_conn->panel_dead_seq) {
@@ -2613,14 +2646,15 @@ static bool _sde_connector_notify_panel_dead(struct sde_connector *conn,
 	dsi_panel_acquire_panel_lock(display->panel);
 	/* Count duplicates too, so an older success cannot consume them. */
 	conn->panel_dead_seq++;
+	/* A coalesced active fault still owns power recovery. */
+	if (request_power_recovery)
+		display->panel->mi_cfg.panel_dead_flag = true;
 	if (conn->panel_dead) {
 		dsi_panel_release_panel_lock(display->panel);
 		return false;
 	}
 
 	conn->panel_dead = true;
-	if (request_power_recovery)
-		display->panel->mi_cfg.panel_dead_flag = true;
 	dsi_panel_release_panel_lock(display->panel);
 	event.type = DRM_EVENT_PANEL_DEAD;
 	event.length = sizeof(bool);

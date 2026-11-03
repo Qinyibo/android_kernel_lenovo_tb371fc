@@ -1,0 +1,22 @@
+FAIL post-on must not consume REK eligibility
+FAIL dead flags remain until readiness callback
+FAIL late REK failure retains both dead flags
+FAIL late-failure native rollback retains rail-cycle eligibility
+FAIL repeat failure never publishes success
+FAIL first normal-wake REK failure requests existing native recovery
+FAIL failed requested recovery cannot self-loop notifications
+FAIL concurrent fault still coalesces
+FAIL blocked bridge cannot consume dead even on successful notifier
+FAIL POWERDOWN notifier cannot finish or renotify recovery
+FAIL LP callback cannot finish recovery
+FAIL FPS-only callback cannot consume dead
+FAIL early UNBLANK cannot finish recovery
+FAIL missing native callback cannot consume recovery
+FAIL same-mode ON-to-ON native modeset still completes touch readiness
+FAIL full modeset with FPS change prefers readiness over FPS-only notification
+FAIL all native modeset predicates deliver readiness
+FAIL all native modeset predicates deliver readiness
+FAIL ON-to-ON late failure requests one native recovery
+FAIL ordinary same-mode frames never poll or renotify touch recovery
+FAIL active readiness failure upgrades earlier notify-only fault without duplicate notification
+35 checks; 21 failures

@@ -910,7 +910,8 @@ static void _sde_kms_drm_check_dpms(struct drm_atomic_state *old_state,
 	struct drm_connector_state *old_conn_state;
 	struct drm_crtc_state *old_crtc_state;
 	struct drm_crtc *crtc;
-	int i, old_mode, new_mode, old_fps, new_fps;
+	int i, old_mode, new_mode, old_fps, new_fps, rc;
+	bool unblank_modeset;
 
 	for_each_old_connector_in_state(old_state, connector,
 			old_conn_state, i) {
@@ -933,7 +934,14 @@ static void _sde_kms_drm_check_dpms(struct drm_atomic_state *old_state,
 			old_mode = DRM_PANEL_BLANK_POWERDOWN;
 		}
 
-		if ((old_mode != new_mode) || (old_fps != new_fps)) {
+		/* A full ON-to-ON modeset also downloads/arms touch firmware.
+		 * Complete it even when DPMS and refresh rate did not change.
+		 */
+		unblank_modeset = event == DRM_PANEL_EVENT_BLANK &&
+				new_mode == DRM_PANEL_BLANK_UNBLANK &&
+				drm_atomic_crtc_needs_modeset(crtc->state);
+		if ((old_mode != new_mode) || (old_fps != new_fps) ||
+				unblank_modeset) {
 			struct drm_panel_notifier notifier_data;
 
 			SDE_EVT32(old_mode, new_mode, old_fps, new_fps,
@@ -947,16 +955,24 @@ static void _sde_kms_drm_check_dpms(struct drm_atomic_state *old_state,
 			 * changes rather than fps change.
 			 */
 
-			if ((old_mode == new_mode) && (old_fps != new_fps))
+			if ((old_mode == new_mode) && (old_fps != new_fps) &&
+			    !unblank_modeset)
 				new_mode = DRM_PANEL_BLANK_FPS_CHANGE;
 
 			notifier_data.data = &new_mode;
 			notifier_data.refresh_rate = new_fps;
 			notifier_data.id = connector->base.id;
 
-			if (connector->panel)
-				drm_panel_notifier_call_chain(connector->panel,
-							event, &notifier_data);
+			if (connector->panel) {
+				rc = drm_panel_notifier_call_chain(
+					connector->panel, event,
+					&notifier_data);
+
+				if (event == DRM_PANEL_EVENT_BLANK &&
+				    new_mode == DRM_PANEL_BLANK_UNBLANK)
+					sde_connector_complete_panel_recovery(
+					connector, notifier_to_errno(rc));
+			}
 		}
 	}
 }

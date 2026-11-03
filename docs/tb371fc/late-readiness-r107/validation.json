@@ -1,0 +1,92 @@
+{
+  "state": "INSTALLED_BOOT_NATIVE_AND_INPUT_STATE_PASS_RARE_FAILURE_UNVERIFIED",
+  "base": "62d357f5e57f48d974873741f204c2fce1bf6c29",
+  "source": {
+    "base": "62d357f5e57f48d974873741f204c2fce1bf6c29",
+    "files": [
+      {
+        "path": "techpack/display/msm/sde/sde_connector.c",
+        "before": "cd516fd2aa6036718fa75cfe29f97fd22d75a3f2f121dbb8fd7ae641df08c05a",
+        "candidate": "cb5e7be86261c317d6e14f693f62916cda2bc77b530cbea553edb5ec1471a061"
+      },
+      {
+        "path": "techpack/display/msm/sde/sde_connector.h",
+        "before": "114ee9f1176625244e70d223a1538820f222a89d34f55a62fb45b0e01d376c6d",
+        "candidate": "342e1e1248bb3a494038ab66a032afb0b1b58bfa98da93d664c6555a9f7c00f1"
+      },
+      {
+        "path": "techpack/display/msm/sde/sde_kms.c",
+        "before": "a3a5c0e98253eaa7719d387869a274042f39c63f67293a673e87caebf81e49cd",
+        "candidate": "3b00c5cc7a5aa7690a080633b102de112d2438db310f3a6f90e0a79dd916bb2d"
+      }
+    ]
+  },
+  "new_contract_checks": 35,
+  "r106_new_contract_failures": 21,
+  "candidate_new_contract_failures": 0,
+  "r106_legacy_regression_checks": 35,
+  "candidate_legacy_regression_failures": 0,
+  "checkpatch_errors": 0,
+  "checkpatch_warnings": 0,
+  "full_image_build_pass": true,
+  "config_unchanged": true,
+  "module_symvers_unchanged": true,
+  "wsl_sources_restored": true,
+  "build_excludes_r100_hid_and_r105_usb": true,
+  "boot_bytes": 100663296,
+  "boot_sha256": "372004d3e4ad7985c58f9eade4961aa89a30ef8a5605e57e09eea0309e7129de",
+  "kernel_sha256": "bfe1eb72f48503560051b5307fa009431cf43c087fc34086130ed9112752e8ff",
+  "boot_header_invariants_pass": true,
+  "raw_nonkernel_payloads_identical": true,
+  "payloads": [
+    {
+      "name": "kernel",
+      "before_sha256": "9cfdff7224e9239bac85fbd96a9a2c3ed197e633bcf5b922be09584c2b50bb07",
+      "candidate_sha256": "bfe1eb72f48503560051b5307fa009431cf43c087fc34086130ed9112752e8ff",
+      "bytes": 50892816
+    },
+    {
+      "name": "ramdisk",
+      "before_sha256": "4e2ed537151fca3f81c72bd1d92ecc5e772c359621e6d0696ae8392a8c285dc6",
+      "candidate_sha256": "4e2ed537151fca3f81c72bd1d92ecc5e772c359621e6d0696ae8392a8c285dc6",
+      "bytes": 14077885
+    },
+    {
+      "name": "second",
+      "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "candidate_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "recovery_dtbo",
+      "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "candidate_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "dtb",
+      "before_sha256": "f33c24db2bbd74161f1a134ddc45f4022eab3384fedcaecffb0011d1f9d2ace3",
+      "candidate_sha256": "f33c24db2bbd74161f1a134ddc45f4022eab3384fedcaecffb0011d1f9d2ace3",
+      "bytes": 1609471
+    }
+  ],
+  "git_patch_application_check_pass": true,
+  "installed_on_device": true,
+  "published": false,
+  "in_v27": false,
+  "hardware_success_claimed": false,
+  "init_9d_root_cause_fixed_claimed": false,
+  "rek_a0_root_cause_fixed_claimed": false,
+  "ordinary_touch_and_home_failure_fixed_claimed": false,
+  "prior_launcher_candidate_withdrawn": true,
+  "boot_test_pass": true,
+  "current_kernel_host": "r107-late-readiness",
+  "boot_partition_readback_pass": true,
+  "native_startup_pass": true,
+  "accepted_launcher_global_and_process_namespace_pass": true,
+  "selinux_enforcing": true,
+  "physical_touch_tested": false,
+  "rare_black_screen_recovery_tested": false,
+  "data_wiped": false,
+  "wakeup_stress_test": false
+}

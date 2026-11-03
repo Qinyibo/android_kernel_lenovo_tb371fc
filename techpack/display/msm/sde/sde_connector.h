@@ -979,6 +979,10 @@ int sde_connector_event_notify(struct drm_connector *connector, uint32_t type,
  */
 void sde_connector_helper_bridge_enable(struct drm_connector *connector);
 
+/* Complete recovery only after native UNBLANK/touch readiness succeeds. */
+void sde_connector_complete_panel_recovery(struct drm_connector *connector,
+		int notify_error);
+
 /**
  * sde_connector_get_panel_vfp - helper to get panel vfp
  * @connector: pointer to drm connector
